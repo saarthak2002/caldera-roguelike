@@ -2,6 +2,8 @@ import dungeon from "./dungeon.js";
 import PlayerCharacter from "./player.js";
 import turnManager from "./turnManager.js";
 import BasicMonster from "./monster.js";
+import WizLord from "./wizard.js";
+import wizardAltar from "./wizardAltar.js";
 
 const scene = {
     preload: function() {
@@ -11,11 +13,13 @@ const scene = {
     create: function() {
         dungeon.initialize(this);
         dungeon.player = new PlayerCharacter(15, 15);
+        dungeon.create3by3Structure(35, 6, wizardAltar);
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
         turnManager.addEntity(new BasicMonster(45, 16));
         turnManager.addEntity(new BasicMonster(30, 43));
         turnManager.addEntity(new BasicMonster(27, 43));
+        turnManager.addEntity(new WizLord(35, 6));
     },
     update: function() {
         if(turnManager.over()) {

@@ -5,6 +5,11 @@ let dungeon = {
     sprites: {
         floor: 0,
         wall: 14,
+        pillarTop: 6,
+        pillarMiddle: 18,
+        pillarBottom: 30,
+        spoutMouth: 20,
+        spoutDrain: 32,
     },
     tileSize: 16,
     initialize: function (scene) {
@@ -55,7 +60,14 @@ let dungeon = {
             }
         }
         let tileAtDestination = dungeon.map.getTileAt(x, y);
-        return tileAtDestination.index !== dungeon.sprites.wall;
+        return (
+            tileAtDestination.index !== dungeon.sprites.wall
+            && tileAtDestination.index !== dungeon.sprites.pillarTop
+            && tileAtDestination.index !== dungeon.sprites.pillarMiddle
+            && tileAtDestination.index !== dungeon.sprites.pillarBottom
+            && tileAtDestination.index !== dungeon.sprites.spoutDrain
+            && tileAtDestination.index !== dungeon.sprites.spoutMouth
+        );
     },
     entityAtTile: function (x, y) {
         let entities = [...turnManager.entities];
@@ -114,6 +126,18 @@ let dungeon = {
         turnManager.entities.delete(entity);
         entity.sprite.destroy();
         entity.onDestroy();
+    },
+    create3by3Structure: function (originX, originY, structure) {
+        console.log(structure);
+        this.map.putTileAt(structure[2][1], originX, originY);
+        this.map.putTileAt(structure[2][0], originX-1, originY);
+        this.map.putTileAt(structure[2][2], originX+1, originY);
+        this.map.putTileAt(structure[1][1], originX, originY-1);
+        this.map.putTileAt(structure[1][0], originX-1, originY-1);
+        this.map.putTileAt(structure[1][2], originX+1, originY-1);
+        this.map.putTileAt(structure[0][1], originX, originY-2);
+        this.map.putTileAt(structure[0][0], originX-1, originY-2);
+        this.map.putTileAt(structure[0][2], originX+1, originY-2);
     }
 }
 
