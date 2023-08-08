@@ -42,7 +42,7 @@ let dungeon = {
             x: this.map.tileToWorldX(x),
             y: this.map.tileToWorldY(y),
             ease: 'Power2',
-            duration: 150,
+            duration: 200,
         });
     },
     isWalkableTile: function (x, y) {
