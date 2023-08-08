@@ -1,9 +1,15 @@
 import dungeon from "./dungeon.js";
 import PlayerCharacter from "./player.js";
 import turnManager from "./turnManager.js";
+
 import BasicMonster from "./monster.js";
+
 import WizLord from "./wizard.js";
 import wizardAltar from "./wizardAltar.js";
+
+import Blacksmith from "./blacksmith.js";
+import blacksmithShop from "./blacksmithShop.js";
+
 
 const scene = {
     preload: function() {
@@ -14,12 +20,14 @@ const scene = {
         dungeon.initialize(this);
         dungeon.player = new PlayerCharacter(15, 15);
         dungeon.create3by3Structure(35, 6, wizardAltar);
+        dungeon.create3by3Structure(45, 16, blacksmithShop);
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
-        turnManager.addEntity(new BasicMonster(45, 16));
+        turnManager.addEntity(new BasicMonster(45, 21));
         turnManager.addEntity(new BasicMonster(30, 43));
         turnManager.addEntity(new BasicMonster(27, 43));
         turnManager.addEntity(new WizLord(35, 6));
+        turnManager.addEntity(new Blacksmith(46, 16));
     },
     update: function() {
         if(turnManager.over()) {
@@ -33,7 +41,7 @@ const config = {
     type: Phaser.AUTO,
     width: 80 * 16,
     height: 50 * 16,
-    backgroundColor: '#000000',
+    backgroundColor: '#763B36',
     parent: 'game',
     pixelArt: true,
     zoom: 1,

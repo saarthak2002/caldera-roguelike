@@ -10,6 +10,7 @@ export default class PlayerCharacter {
         this.x = x;
         this.y =y;
         this.tile = 85;
+        this.attackPower = 1;
         dungeon.initializeEntity(this);
     }
 
@@ -49,8 +50,14 @@ export default class PlayerCharacter {
                     let enemy = dungeon.entityAtTile(newX, newY);
 
                     if(enemy && this.actionPoints > 0) {
-                        dungeon.attackEntity(this, enemy);
-                        this.actionPoints -= 1;
+                        if (enemy.interactable) {
+                            console.log(`${enemy.name} interacted with`);
+                            enemy.interact();
+                        }
+                        else {
+                            dungeon.attackEntity(this, enemy);
+                            this.actionPoints -= 1;
+                        }
                     }
 
                     newX = oldX;
@@ -68,7 +75,7 @@ export default class PlayerCharacter {
     }
 
     attack() {
-        return 1;
+        return this.attackPower;
     }
 
     onDestroy() {

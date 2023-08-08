@@ -44,11 +44,13 @@ export default class WizLord {
     }
 
     attack() {
-        return 2;
+        return Math.floor(Math.random() * 3) + 1;
     }
 
     onDestroy() {
         console.log(`${this.name} has been destroyed!`);
+        dungeon.player.healthPoints += 5;
+        console.log(`${dungeon.player.name} has gained 5 HP!`);
     }
 
     over() {

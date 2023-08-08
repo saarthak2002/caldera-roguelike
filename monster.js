@@ -27,7 +27,9 @@ export default class BasicMonster {
 
         if(this.movementPoints > 0) {
             if(path.length > 2) {
-                dungeon.moveEntityTo(this, path[1][0], path[1][1]);
+                if(dungeon.isWalkableTile(path[1][0], path[1][1])){
+                    dungeon.moveEntityTo(this, path[1][0], path[1][1]);
+                }
             }
             this.movementPoints -= 1;
         }

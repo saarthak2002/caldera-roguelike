@@ -10,6 +10,14 @@ let dungeon = {
         pillarBottom: 30,
         spoutMouth: 20,
         spoutDrain: 32,
+        caveLeft : 10,
+        caveRight : 11,
+        window : 28,
+        minecart : 55,
+        trackLeft : 93,
+        trackRight : 95,
+        trackStraight : 83,
+        anvil : 74,
     },
     tileSize: 16,
     initialize: function (scene) {
@@ -67,6 +75,14 @@ let dungeon = {
             && tileAtDestination.index !== dungeon.sprites.pillarBottom
             && tileAtDestination.index !== dungeon.sprites.spoutDrain
             && tileAtDestination.index !== dungeon.sprites.spoutMouth
+            && tileAtDestination.index !== dungeon.sprites.caveLeft
+            && tileAtDestination.index !== dungeon.sprites.caveRight
+            && tileAtDestination.index !== dungeon.sprites.window
+            && tileAtDestination.index !== dungeon.sprites.minecart
+            && tileAtDestination.index !== dungeon.sprites.anvil
+            && tileAtDestination.index !== dungeon.sprites.trackLeft
+            && tileAtDestination.index !== dungeon.sprites.trackRight
+            && tileAtDestination.index !== dungeon.sprites.trackStraight
         );
     },
     entityAtTile: function (x, y) {
@@ -128,16 +144,24 @@ let dungeon = {
         entity.onDestroy();
     },
     create3by3Structure: function (originX, originY, structure) {
-        console.log(structure);
         this.map.putTileAt(structure[2][1], originX, originY);
+        this.level[originY][originX] = 1;
         this.map.putTileAt(structure[2][0], originX-1, originY);
+        this.level[originY][originX-1] = 1;
         this.map.putTileAt(structure[2][2], originX+1, originY);
+        this.level[originY][originX+1] = 1;
         this.map.putTileAt(structure[1][1], originX, originY-1);
+        this.level[originY-1][originX] = 1;
         this.map.putTileAt(structure[1][0], originX-1, originY-1);
+        this.level[originY-1][originX-1] = 1;
         this.map.putTileAt(structure[1][2], originX+1, originY-1);
+        this.level[originY-1][originX+1] = 1;
         this.map.putTileAt(structure[0][1], originX, originY-2);
+        this.level[originY-2][originX] = 1;
         this.map.putTileAt(structure[0][0], originX-1, originY-2);
+        this.level[originY-2][originX-1] = 1;
         this.map.putTileAt(structure[0][2], originX+1, originY-2);
+        this.level[originY-2][originX+1] = 1;
     }
 }
 
