@@ -25,7 +25,6 @@ export default class Blacksmith {
 
     interact() {
         if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
-            console.log('blacksmith interacted with');
             console.log(`${this.name}: This dungeon is overrun with monsters! Let me help you!`);
             dungeon.player.attackPower = 3;
             console.log(`${dungeon.player.name} now has 3 attack power!`);

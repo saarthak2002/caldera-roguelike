@@ -51,7 +51,6 @@ export default class PlayerCharacter {
 
                     if(enemy && this.actionPoints > 0) {
                         if (enemy.interactable) {
-                            console.log(`${enemy.name} interacted with`);
                             enemy.interact();
                         }
                         else {

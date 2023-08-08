@@ -10,6 +10,8 @@ import wizardAltar from "./wizardAltar.js";
 import Blacksmith from "./blacksmith.js";
 import blacksmithShop from "./blacksmithShop.js";
 
+import Bat from "./bat.js";
+
 
 const scene = {
     preload: function() {
@@ -28,6 +30,9 @@ const scene = {
         turnManager.addEntity(new BasicMonster(27, 43));
         turnManager.addEntity(new WizLord(35, 6));
         turnManager.addEntity(new Blacksmith(46, 16));
+        turnManager.addEntity(new Bat(20, 11));
+        turnManager.addEntity(new Bat(53, 33));
+        turnManager.addEntity(new Bat(55, 31));
     },
     update: function() {
         if(turnManager.over()) {

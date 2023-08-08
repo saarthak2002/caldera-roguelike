@@ -1,19 +1,19 @@
 import dungeon from "./dungeon.js";
 
-export default class BasicMonster {
+export default class Bat {
     constructor(x, y) {
-        this.name = 'A Weak Monster';
-        this.movementPoints = 1;
-        this.actionPoints = 1;
-        this.healthPoints = 3;
+        this.name = 'A Bat';
+        this.movementPoints = 3;
+        this.actionPoints = 2;
+        this.healthPoints = 1;
         this.x = x;
         this.y = y;
-        this.tile = 109;
+        this.tile = 120;
         dungeon.initializeEntity(this);
     }
     refresh() {
-        this.movementPoints = 1;
-        this.actionPoints = 1;
+        this.movementPoints = 2;
+        this.actionPoints = 2;
     }
 
     turn() {
@@ -33,7 +33,7 @@ export default class BasicMonster {
         }
 
         if(this.actionPoints > 0) {
-            if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
+            if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 3) {
                 dungeon.attackEntity(this, dungeon.player);
             }
             this.actionPoints -= 1;

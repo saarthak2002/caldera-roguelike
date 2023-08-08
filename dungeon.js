@@ -46,12 +46,12 @@ let dungeon = {
     },
     moveEntityTo: function (entity, x, y) {
         entity.moving = true;
+        entity.x = x;
+        entity.y = y;
         this.scene.tweens.add({
             targets: entity.sprite,
             onComplete: () => {
                 entity.moving = false;
-                entity.x = x;
-                entity.y = y;
             },
             x: this.map.tileToWorldX(x),
             y: this.map.tileToWorldY(y),
