@@ -1,9 +1,12 @@
+import dungeon from "./dungeon.js";
+
 const scene = {
     preload: function() {
         this.load.bitmapFont('arcade', 'assets/fonts/arcade.png', 'assets/fonts/arcade.xml');
+        this.load.spritesheet('tiles', 'assets/tilemap.png', { frameWidth: 16, frameHeight: 16, spacing: 1 });
     },
     create: function() {
-        this.helloText = this.add.bitmapText(400,300,'arcade', 'Hello World').setOrigin(0.5);
+        dungeon.initialize(this);
     },
     update: function() {
 
