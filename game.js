@@ -1,4 +1,5 @@
 import dungeon from "./dungeon.js";
+import PlayerCharacter from "./player.js";
 
 const scene = {
     preload: function() {
@@ -7,6 +8,7 @@ const scene = {
     },
     create: function() {
         dungeon.initialize(this);
+        let player = new PlayerCharacter(15, 15);
     },
     update: function() {
 
