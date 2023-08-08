@@ -2,7 +2,10 @@ import dungeon from "./dungeon.js";
 
 export default class PlayerCharacter {
     constructor(x, y) {
-        this.movementPoints = 0;
+        this.name = 'The Player';
+        this.movementPoints = 1;
+        this.actionPoints = 1;
+        this.healthPoints = 15;
         this.cursors = dungeon.scene.input.keyboard.createCursorKeys();
         this.x = x;
         this.y =y;
@@ -12,6 +15,7 @@ export default class PlayerCharacter {
 
     refresh() {
         this.movementPoints = 1;
+        this.actionPoints = 1;
     }
 
     turn() {
@@ -43,6 +47,15 @@ export default class PlayerCharacter {
                 }
             }
         }
+    }
+
+    attack() {
+        return 1;
+    }
+
+    onDestroy() {
+        alert(`${this.name} has been destroyed!`);
+        location.reload();
     }
 
     over() {
