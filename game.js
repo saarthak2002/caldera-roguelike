@@ -1,5 +1,6 @@
 import dungeon from "./dungeon.js";
 import PlayerCharacter from "./player.js";
+import turnManager from "./turnManager.js";
 
 const scene = {
     preload: function() {
@@ -9,9 +10,13 @@ const scene = {
     create: function() {
         dungeon.initialize(this);
         let player = new PlayerCharacter(15, 15);
+        turnManager.addEntity(player);
     },
     update: function() {
-
+        if(turnManager.over()) {
+            turnManager.refresh();
+        }
+        turnManager.turn();
     }
 }
 
