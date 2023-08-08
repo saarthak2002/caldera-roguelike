@@ -6,8 +6,8 @@ export default class PlayerCharacter {
         this.cursors = dungeon.scene.input.keyboard.createCursorKeys();
         this.x = x;
         this.y =y;
-        this.sprite = 85;
-        dungeon.map.putTileAt(this.sprite, this.x, this.y);
+        this.tile = 85;
+        dungeon.initializeEntity(this);
     }
 
     refresh() {
@@ -15,45 +15,37 @@ export default class PlayerCharacter {
     }
 
     turn() {
-        let oldX = this.x;
-        let oldY = this.y;
+        let newX = this.x;
+        let newY = this.y;
         let moved = false;
 
-        if(this.movementPoints > 0) {
+        if(this.movementPoints > 0 && !this.moving) {
             if(this.cursors.left.isDown) {
-                this.x -= 1;
+                newX -= 1;
                 moved = true;
             }
             if (this.cursors.right.isDown) {
-                this.x += 1;
+                newX += 1;
                 moved = true;
             }
             if (this.cursors.up.isDown) {
-                this.y -= 1;
+                newY -= 1;
                 moved = true;
             }
             if (this.cursors.down.isDown) {
-                this.y += 1;
+                newY += 1;
                 moved = true;
             }
             if (moved) {
                 this.movementPoints -= 1;
+                if(dungeon.isWalkableTile(newX, newY)) {
+                    dungeon.moveEntityTo(this, newX, newY);
+                }
             }
-        }
-
-        let tileAtDestination = dungeon.map.getTileAt(this.x, this.y)
-        if (tileAtDestination.index == dungeon.sprites.wall) {
-            this.x = oldX
-            this.y = oldY
-        }
-
-        if(this.x !== oldX || this.y !== oldY) {
-            dungeon.map.putTileAt(this.sprite, this.x, this.y)
-            dungeon.map.putTileAt(dungeon.sprites.floor, oldX, oldY)
         }
     }
 
     over() {
-        return this.movementPoints == 0;
+        return this.movementPoints == 0 && !this.moving;
     }
 }
