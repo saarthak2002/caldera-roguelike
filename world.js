@@ -1,6 +1,3 @@
-import ui from "./ui.js";
-import world from "./world.js";
-
 import dungeon from "./dungeon.js";
 import PlayerCharacter from "./player.js";
 import turnManager from "./turnManager.js";
@@ -16,7 +13,9 @@ import blacksmithShop from "./blacksmithShop.js";
 import Bat from "./bat.js";
 
 
-const scene = {
+const world = {
+    key: 'world-scene',
+    active: true,
     preload: function() {
         this.load.bitmapFont('arcade', 'assets/fonts/arcade.png', 'assets/fonts/arcade.xml');
         this.load.spritesheet('tiles', 'assets/tilemap.png', { frameWidth: 16, frameHeight: 16, spacing: 1 });
@@ -36,6 +35,12 @@ const scene = {
         turnManager.addEntity(new Bat(20, 11));
         turnManager.addEntity(new Bat(53, 33));
         turnManager.addEntity(new Bat(55, 31));
+
+        let camera = this.cameras.main;
+        camera.setViewport(0, 0, camera.worldView.width-200, camera.worldView.height);
+        camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
+        camera.startFollow(dungeon.player.sprite);
+        this.events.emit('createUI');
     },
     update: function() {
         if(turnManager.over()) {
@@ -45,21 +50,4 @@ const scene = {
     }
 }
 
-const config = {
-    type: Phaser.AUTO,
-    width: 80 * 16,
-    height: 50 * 16,
-    backgroundColor: '#763B36',
-    parent: 'game',
-    pixelArt: true,
-    zoom: 1,
-    scene: [world, ui],
-    physics: {
-        default: "arcade",
-        arcade: {
-            gravity: { y: 0 }
-        }
-    }
-}
-
-const game = new Phaser.Game(config)
+export default world;

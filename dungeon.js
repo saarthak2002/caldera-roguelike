@@ -2,6 +2,11 @@ import level from "./level.js";
 import turnManager from "./turnManager.js";
 
 let dungeon = {
+    messages: [],
+    log: function (message) {
+        this.messages.unshift(message);
+        this.messages = this.messages.slice(0, 8);
+    },
     sprites: {
         floor: 0,
         wall: 14,
@@ -123,7 +128,7 @@ let dungeon = {
 
                 let damage = attackingEntity.attack();
                 victimEntity.healthPoints -= damage;
-                console.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
+                this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
 
                 if(victimEntity.healthPoints <= 0) {
                     this.removeEntity(victimEntity);
@@ -162,7 +167,7 @@ let dungeon = {
         this.level[originY-2][originX-1] = 1;
         this.map.putTileAt(structure[0][2], originX+1, originY-2);
         this.level[originY-2][originX+1] = 1;
-    }
+    },
 }
 
 export default dungeon
