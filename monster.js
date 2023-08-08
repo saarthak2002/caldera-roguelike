@@ -5,7 +5,7 @@ export default class BasicMonster {
         this.name = 'A Weak Monster';
         this.movementPoints = 1;
         this.actionPoints = 1;
-        this.healthPoints = 1;
+        this.healthPoints = 3;
         this.x = x;
         this.y =y;
         this.tile = 109;

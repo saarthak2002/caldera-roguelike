@@ -22,6 +22,8 @@ export default class PlayerCharacter {
         let newX = this.x;
         let newY = this.y;
         let moved = false;
+        let oldX = this.x;
+        let oldY = this.y;
 
         if(this.movementPoints > 0 && !this.moving) {
             if(this.cursors.left.isDown) {
@@ -42,10 +44,26 @@ export default class PlayerCharacter {
             }
             if (moved) {
                 this.movementPoints -= 1;
-                if(dungeon.isWalkableTile(newX, newY)) {
+
+                if(!dungeon.isWalkableTile(newX, newY)) { // enemy attack
+                    let enemy = dungeon.entityAtTile(newX, newY);
+
+                    if(enemy && this.actionPoints > 0) {
+                        dungeon.attackEntity(this, enemy);
+                        this.actionPoints -= 1;
+                    }
+
+                    newX = oldX;
+                    newY = oldY;
+                }
+
+                if(newX !== oldX || newY !== oldY) {
                     dungeon.moveEntityTo(this, newX, newY);
                 }
             }
+        }
+        if(this.healthPoints <= 5) {
+            this.sprite.tint = Phaser.Display.Color.GetColor(255, 0, 0);
         }
     }
 
@@ -54,7 +72,7 @@ export default class PlayerCharacter {
     }
 
     onDestroy() {
-        alert(`${this.name} has been destroyed!`);
+        alert(`Game Over: ${this.name} has been destroyed!`);
         location.reload();
     }
 

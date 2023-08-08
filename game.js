@@ -14,6 +14,8 @@ const scene = {
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
         turnManager.addEntity(new BasicMonster(45, 16));
+        turnManager.addEntity(new BasicMonster(30, 43));
+        turnManager.addEntity(new BasicMonster(27, 43));
     },
     update: function() {
         if(turnManager.over()) {
