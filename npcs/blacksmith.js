@@ -10,6 +10,7 @@ export default class Blacksmith {
         this.y = y;
         this.tile = 97;
         this.interactable = true;
+        this.type = 'npc';
         dungeon.initializeEntity(this);
     }
 

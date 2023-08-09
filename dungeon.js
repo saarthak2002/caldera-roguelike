@@ -44,10 +44,12 @@ let dungeon = {
         this.map = map.createLayer(0, tileset, 0, 0);
     },
     initializeEntity: function (entity) {
-        let x = this.map.tileToWorldX(entity.x);
-        let y = this.map.tileToWorldY(entity.y);
-        entity.sprite = this.scene.add.sprite(x, y, 'tiles', entity.tile);
-        entity.sprite.setOrigin(0);
+        if(entity.x && entity.y) {
+            let x = this.map.tileToWorldX(entity.x);
+            let y = this.map.tileToWorldY(entity.y);
+            entity.sprite = this.scene.add.sprite(x, y, 'tiles', entity.tile);
+            entity.sprite.setOrigin(0);
+        }
     },
     moveEntityTo: function (entity, x, y) {
         entity.moving = true;
@@ -68,7 +70,7 @@ let dungeon = {
         let entities = [...turnManager.entities];
         for(let entity_i=0; entity_i<entities.length; entity_i++) {
             let entity = entities[entity_i];
-            if(entity.x === x && entity.y === y) {
+            if(entity.sprite && entity.x === x && entity.y === y) {
                 return false;
             }
         }
@@ -94,7 +96,7 @@ let dungeon = {
         let entities = [...turnManager.entities];
         for(let entity_i=0; entity_i<entities.length; entity_i++) {
             let entity = entities[entity_i];
-            if(entity.x === x && entity.y === y) {
+            if(entity.sprite && entity.x === x && entity.y === y) {
                 return entity;
             }
         }
@@ -153,7 +155,12 @@ let dungeon = {
     removeEntity: function (entity) {
         turnManager.entities.delete(entity);
         entity.sprite.destroy();
+        delete entity.sprite;
         entity.onDestroy();
+    },
+    itemPicked: function (entity) {
+        entity.sprite.destroy();
+        delete entity.sprite;
     },
     create3by3Structure: function (originX, originY, structure) {
         this.map.putTileAt(structure[2][1], originX, originY);

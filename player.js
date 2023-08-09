@@ -1,4 +1,5 @@
 import dungeon from "./dungeon.js";
+import BasicSword from "./items/basicSword.js";
 
 export default class PlayerCharacter {
     constructor(x, y) {
@@ -10,8 +11,23 @@ export default class PlayerCharacter {
         this.x = x;
         this.y =y;
         this.tile = 85;
-        this.attackPower = 1;
+        this.attackPower = 0;
+        this.type = "character";
+        this.items = [];
+        this.items.push(new BasicSword());
+        this.toggleItem(0);
+
         dungeon.initializeEntity(this);
+
+        dungeon.scene.input.keyboard.on("keyup", (event) => {
+            let key = event.key;
+            if(!isNaN(Number(key))) {
+                if(key == 0) {
+                    key = 10;
+                }
+                this.toggleItem(key - 1);
+            }
+        });
     }
 
     refresh() {
@@ -47,20 +63,30 @@ export default class PlayerCharacter {
                 this.movementPoints -= 1;
 
                 if(!dungeon.isWalkableTile(newX, newY)) { // enemy attack
-                    let enemy = dungeon.entityAtTile(newX, newY);
+                    let entity = dungeon.entityAtTile(newX, newY);
 
-                    if(enemy && this.actionPoints > 0) {
-                        if (enemy.interactable) {
-                            enemy.interact();
-                        }
-                        else {
-                            dungeon.attackEntity(this, enemy);
-                            this.actionPoints -= 1;
-                        }
+                    if(entity && entity.type === 'enemy' && this.actionPoints > 0) {
+                        dungeon.attackEntity(this, entity);
+                        this.actionPoints -= 1;
                     }
 
-                    newX = oldX;
-                    newY = oldY;
+                    if(entity && entity.type === 'item' && this.actionPoints > 0) {
+                        this.items.push(entity);
+                        dungeon.itemPicked(entity);
+                        dungeon.log(`${this.name} picked up ${entity.name}: ${entity.description}.`);
+                        this.actionPoints -= 1;
+                    }
+
+                    if (entity && entity.type === 'npc' && this.actionPoints > 0) {
+                        entity.interact();
+                        this.actionPoints -= 1;
+                        newX = oldX;
+                        newY = oldY;
+                    }
+                    else {
+                        newX = oldX;
+                        newY = oldY;
+                    }
                 }
 
                 if(newX !== oldX || newY !== oldY) {
@@ -74,10 +100,15 @@ export default class PlayerCharacter {
         if(this.healthPoints > 5) {
             this.sprite.clearTint();
         }
+
+        this.refreshUI();
     }
 
     attack() {
-        return this.attackPower;
+        const items = this.equippedItems();
+        const combineDamage = (total, item) => total + item.damage();
+        const damage = items.reduce(combineDamage, 0);
+        return this.attackPower + damage;
     }
 
     onDestroy() {
@@ -102,13 +133,13 @@ export default class PlayerCharacter {
     }
 
     createUI(config) {
-        let scene = config.scene;
+        this.UIscene = config.scene;
         let x = config.x;
         let y = config.y;
         let accumulatedHeight = 0;
-        this.UIsprite = scene.add.sprite(x, y, 'tiles', this.tile).setOrigin(0);
+        this.UIsprite = this.UIscene.add.sprite(x, y, 'tiles', this.tile).setOrigin(0);
 
-        this.UIheader = scene.add.text(
+        this.UIheader = this.UIscene.add.text(
             x + 20,
             y,
             this.name,
@@ -118,7 +149,7 @@ export default class PlayerCharacter {
             },
         );
 
-        this.UIstatsText = scene.add.text(
+        this.UIstatsText = this.UIscene.add.text(
             x+20,
             y+20,
             `Hp: ${this.healthPoints}\nMp: ${this.movementPoints}\nAp: ${this.actionPoints}`,
@@ -139,14 +170,73 @@ export default class PlayerCharacter {
                 let rowX = x + (cell * 25);
                 let rowY = y + 50 + (row * 25);
                 this.UIitems.push(
-                    scene.add.rectangle(rowX, rowY, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
+                    this.UIscene.add.rectangle(rowX, rowY, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
                 );
             }
         }
         accumulatedHeight += 90;
 
-        scene.add.line(x+5, y+120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
+        this.UIscene.add.line(x+5, y+120, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0);
         return accumulatedHeight;
 
+    }
+
+    refreshUI() {
+        for(let i=0; i<this.items.length; i++) {
+            let item = this.items[i];
+            if(!item.UIsprite) {
+                let x = this.UIitems[i].x + 10;
+                let y = this.UIitems[i].y + 10;
+                item.UIsprite = this.UIscene.add.sprite(x, y, 'tiles', item.tile);
+            }
+            if(!item.active) {
+                item.UIsprite.setAlpha(0.5);
+                this.UIitems[i].setStrokeStyle();
+            }
+            else {
+                item.UIsprite.setAlpha(1);
+                this.UIitems[i].setStrokeStyle(1, 0xffffff);
+            }
+        }
+    }
+ 
+    toggleItem(itemNumber) {
+        const item = this.items[itemNumber];
+        if(item) {
+            if(item.weapon) {
+                this.items.forEach(item => item.active = item.weapon ? false : item.active);
+            }
+            item.active = !item.active;
+    
+            if(item.active) {
+                dungeon.log(`${this.name} equipped ${item.name}: ${item.description}.`);
+                item.equip(itemNumber);
+            }
+        }
+    }
+
+    removeItem(itemNumber) {
+        const item = this.items[itemNumber];
+        if(item) {
+            this.items.forEach(item => {
+                item.UIsprite.destroy();
+                delete item.UIsprite;
+            });
+            this.items = this.items.filter(i => i !== item);
+            this.refreshUI();
+        }
+    }
+
+    removeItemByProperty(property, value) {
+        this.items.forEach(item => {
+            item.UIsprite.destroy();
+            delete item.UIsprite;
+        });
+        this.items = this.items.filter(item => item[property] !== value);
+        this.refreshUI();
+    }
+
+    equippedItems() {
+        return this.items.filter(item => item.active);
     }
 }
