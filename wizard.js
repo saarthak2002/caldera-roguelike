@@ -50,9 +50,14 @@ export default class WizLord {
     onDestroy() {
         dungeon.log(`${this.name} has been destroyed!`);
         dungeon.player.healthPoints += 5;
+        dungeon.healSound.play();
         dungeon.log(`${dungeon.player.name} has gained 5 HP!`);
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
+        this.HPtext.setAlpha(0.2);
+        this.HPtext.setText(
+            `HP: 0`
+        );
     }
 
     over() {
@@ -63,6 +68,11 @@ export default class WizLord {
         else {
             this.UItext.setColor('#50C878')
         }
+        if(this.HPtext) {
+            this.HPtext.setText(
+                `HP: ${this.healthPoints}`
+            );
+        }
         return isOver;
     }
 
@@ -72,7 +82,8 @@ export default class WizLord {
         let y = config.y;
 
         this.UIsprite = scene.add.sprite(x, y, 'tiles', this.tile).setOrigin(0);
-        this.UItext = scene.add.text(x+20, y, this.name, {font: '16px arcade', fill: '#cfc6b8'})
+        this.UItext = scene.add.text(x+20, y, this.name, {font: '16px arcade', fill: '#cfc6b8'});
+        this.HPtext = scene.add.text(x+20, y+15, `HP: ${this.healthPoints}`, {font: '9px Arial', fill: '#a8a196'});
         return 30;
     }
 }

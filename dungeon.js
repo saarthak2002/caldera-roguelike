@@ -117,7 +117,14 @@ let dungeon = {
         attackingEntity.moving = true;
         attackingEntity.tweens = attackingEntity.tweens || 0;
         attackingEntity.tweens += 1;
-
+        
+        if(attackingEntity.name === 'A Poweful Wizard') {
+            this.magicAttackSound.play();
+        }
+        else {
+            this.attackSound.play();
+        }
+        
         this.scene.tweens.add({
             targets: attackingEntity.sprite,
             onComplete: () => {

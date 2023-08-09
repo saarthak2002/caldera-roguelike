@@ -25,6 +25,7 @@ export default class Blacksmith {
 
     interact() {
         if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
+            dungeon.upgradeSound.play();
             dungeon.log(`${this.name}: This dungeon is overrun with monsters! Let me help you!`);
             dungeon.player.attackPower = 3;
             dungeon.log(`${dungeon.player.name} now has 3 attack power!`);
