@@ -2,21 +2,21 @@ import dungeon from "./dungeon.js";
 import PlayerCharacter from "./player.js";
 import turnManager from "./turnManager.js";
 
-import BasicMonster from "./monster.js";
+import BasicMonster from "./enemies/cyclops.js";
 
-import WizLord from "./wizard.js";
-import wizardAltar from "./wizardAltar.js";
+import WizLord from "./enemies/wizard.js";
+import wizardAltar from "./structures/wizardAltar.js";
 
-import Blacksmith from "./blacksmith.js";
-import blacksmithShop from "./blacksmithShop.js";
+import Blacksmith from "./npcs/blacksmith.js";
+import blacksmithShop from "./structures/blacksmithShop.js";
 
-import Bat from "./bat.js";
+import Bat from "./enemies/bat.js";
 
 
 const world = {
     key: 'world-scene',
     active: true,
-    preload: function() {
+    preload: function () {
         this.load.bitmapFont('arcade', 'assets/fonts/arcade.png', 'assets/fonts/arcade.xml');
         this.load.spritesheet('tiles', 'assets/tilemap.png', { frameWidth: 16, frameHeight: 16, spacing: 1 });
         this.load.audio('music', 'assets/audio/game_music.mp3');
@@ -25,7 +25,7 @@ const world = {
         this.load.audio('heal', 'assets/audio/heal.mp3');
         this.load.audio('upgrade', 'assets/audio/upgrade.mp3');
     },
-    create: function() {
+    create: function () {
         dungeon.initialize(this);
         dungeon.player = new PlayerCharacter(15, 15);
         dungeon.create3by3Structure(35, 6, wizardAltar);
@@ -47,7 +47,7 @@ const world = {
         // turnManager.addEntity(new Bat(55, 31));
 
         let camera = this.cameras.main;
-        camera.setViewport(0, 0, camera.worldView.width-200, camera.worldView.height);
+        camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
         camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
         camera.startFollow(dungeon.player.sprite);
         this.events.emit('createUI');
@@ -64,8 +64,8 @@ const world = {
         }
         this.music.play(musicConfig);
     },
-    update: function() {
-        if(turnManager.over()) {
+    update: function () {
+        if (turnManager.over()) {
             turnManager.refresh();
         }
         turnManager.turn();

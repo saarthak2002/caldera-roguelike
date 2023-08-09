@@ -1,4 +1,4 @@
-import dungeon from "./dungeon.js";
+import dungeon from "../dungeon.js";
 
 export default class Blacksmith {
     constructor(x, y) {
@@ -24,7 +24,7 @@ export default class Blacksmith {
     }
 
     interact() {
-        if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
+        if (dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
             dungeon.upgradeSound.play();
             dungeon.log(`${this.name}: This dungeon is overrun with monsters! Let me help you!`);
             dungeon.player.attackPower = 3;
