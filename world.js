@@ -28,13 +28,13 @@ const world = {
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
         turnManager.addEntity(new BasicMonster(45, 21));
-        turnManager.addEntity(new BasicMonster(30, 43));
-        turnManager.addEntity(new BasicMonster(27, 43));
+        // turnManager.addEntity(new BasicMonster(30, 43));
+        // turnManager.addEntity(new BasicMonster(27, 43));
         turnManager.addEntity(new WizLord(35, 6));
         turnManager.addEntity(new Blacksmith(46, 16));
         turnManager.addEntity(new Bat(20, 11));
-        turnManager.addEntity(new Bat(53, 33));
-        turnManager.addEntity(new Bat(55, 31));
+        // turnManager.addEntity(new Bat(53, 33));
+        // turnManager.addEntity(new Bat(55, 31));
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width-200, camera.worldView.height);

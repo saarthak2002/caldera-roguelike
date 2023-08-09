@@ -25,9 +25,9 @@ export default class Blacksmith {
 
     interact() {
         if(dungeon.distanceBetweenEntities(this, dungeon.player) <= 2) {
-            console.log(`${this.name}: This dungeon is overrun with monsters! Let me help you!`);
+            dungeon.log(`${this.name}: This dungeon is overrun with monsters! Let me help you!`);
             dungeon.player.attackPower = 3;
-            console.log(`${dungeon.player.name} now has 3 attack power!`);
+            dungeon.log(`${dungeon.player.name} now has 3 attack power!`);
         }
     }
 
@@ -36,9 +36,9 @@ export default class Blacksmith {
     }
 
     onDestroy() {
-        console.log(`${this.name} has been destroyed!`);
+        dungeon.log(`${this.name} has been destroyed!`);
         dungeon.player.healthPoints += 5;
-        console.log(`${dungeon.player.name} has gained 5 HP!`);
+        dungeon.log(`${dungeon.player.name} has gained 5 HP!`);
     }
 
     over() {

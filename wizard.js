@@ -48,12 +48,31 @@ export default class WizLord {
     }
 
     onDestroy() {
-        console.log(`${this.name} has been destroyed!`);
+        dungeon.log(`${this.name} has been destroyed!`);
         dungeon.player.healthPoints += 5;
-        console.log(`${dungeon.player.name} has gained 5 HP!`);
+        dungeon.log(`${dungeon.player.name} has gained 5 HP!`);
+        this.UIsprite.setAlpha(0.2);
+        this.UItext.setAlpha(0.2);
     }
 
     over() {
-        return this.movementPoints == 0 && this.actionPoints == 0 && !this.moving;
+        let isOver = this.movementPoints == 0 && this.actionPoints == 0 && !this.moving;
+        if(isOver && this.UItext) {
+            this.UItext.setColor('#cfc6b8')
+        }
+        else {
+            this.UItext.setColor('#50C878')
+        }
+        return isOver;
+    }
+
+    createUI(config) {
+        let scene = config.scene;
+        let x = config.x;
+        let y = config.y;
+
+        this.UIsprite = scene.add.sprite(x, y, 'tiles', this.tile).setOrigin(0);
+        this.UItext = scene.add.text(x+20, y, this.name, {font: '16px arcade', fill: '#cfc6b8'})
+        return 30;
     }
 }
