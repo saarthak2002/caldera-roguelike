@@ -19,7 +19,7 @@ export default class PlayerCharacter {
         this.defenseBuff = '';
         this.items.push(new BasicSword());
         this.toggleItem(0);
-
+        this.active = true;
         dungeon.initializeEntity(this);
 
         dungeon.scene.input.keyboard.on("keyup", (event) => {

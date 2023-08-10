@@ -123,6 +123,9 @@ let dungeon = {
         if(attackingEntity.name === 'A Poweful Wizard') {
             this.magicAttackSound.play();
         }
+        else if(attackingEntity.name === 'A Necromancer') {
+            this.massiveHit.play();
+        }
         else {
             this.attackSound.play();
         }
@@ -141,7 +144,7 @@ let dungeon = {
                     damage -= victimEntity.defensePower;
                 }
                 victimEntity.healthPoints -= damage;
-                
+
                 this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
 
                 if(victimEntity.healthPoints <= 0) {

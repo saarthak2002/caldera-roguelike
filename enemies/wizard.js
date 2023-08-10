@@ -11,7 +11,8 @@ export default class WizLord {
         this.x = x;
         this.y = y;
         this.tile = 84;
-        this.type = "enemy"
+        this.type = "enemy";
+        this.active = true;
         dungeon.initializeEntity(this);
     }
 

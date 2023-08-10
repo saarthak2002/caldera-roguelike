@@ -11,7 +11,8 @@ export default class Bat {
         this.x = x;
         this.y = y;
         this.tile = 120;
-        this.type = "enemy"
+        this.type = "enemy";
+        this.active = true;
         dungeon.initializeEntity(this);
     }
     refresh() {

@@ -9,10 +9,11 @@ import wizardAltar from "./structures/wizardAltar.js";
 
 import Blacksmith from "./npcs/blacksmith.js";
 import blacksmithShop from "./structures/blacksmithShop.js";
+import GraveSpirit from "./npcs/gravespirit.js";
 
 import HealingPotion from "./items/healingPotion.js";
 import SharpDagger from "./items/sharpDagger.js";
-
+import Necromancer from "./enemies/necromancer.js";
 import Bat from "./enemies/bat.js";
 
 
@@ -28,6 +29,8 @@ const world = {
         this.load.audio('heal', 'assets/audio/heal.mp3');
         this.load.audio('upgrade', 'assets/audio/upgrade.mp3');
         this.load.audio('pickup', 'assets/audio/Rise02.mp3');
+        this.load.audio('necromancer', 'assets/audio/necro_scream.mp3');
+        this.load.audio('massiveHit', 'assets/audio/massiveHit.mp3');
     },
     create: function () {
         dungeon.initialize(this);
@@ -39,26 +42,32 @@ const world = {
         dungeon.magicAttackSound = this.sound.add('magicAttack');
         dungeon.healSound = this.sound.add('heal');
         dungeon.pickupSound = this.sound.add('pickup');
+        dungeon.necromancerScream = this.sound.add('necromancer');
+        dungeon.massiveHit = this.sound.add('massiveHit');
 
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
         turnManager.addEntity(new BasicMonster(45, 21));
-        // turnManager.addEntity(new BasicMonster(30, 43));
+        turnManager.addEntity(new BasicMonster(30, 43));
         turnManager.addEntity(new BasicMonster(70, 40));
         turnManager.addEntity(new WizLord(35, 6));
         turnManager.addEntity(new Blacksmith(46, 16));
         turnManager.addEntity(new Bat(20, 11));
-        // turnManager.addEntity(new Bat(53, 33));
-        // turnManager.addEntity(new Bat(55, 31));
+        turnManager.addEntity(new Bat(53, 33));
+        turnManager.addEntity(new Bat(55, 31));
 
         turnManager.addEntity(new HealingPotion(30, 43));
         turnManager.addEntity(new SharpDagger(54, 32));
+
+        turnManager.addEntity(new GraveSpirit(28, 43));
+        turnManager.addEntity(new Necromancer(57, 32));
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
         camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
         camera.startFollow(dungeon.player.sprite);
         this.events.emit('createUI');
+
 
         this.music = this.sound.add('music');
         let musicConfig = {
@@ -70,14 +79,46 @@ const world = {
             loop: true,
             delay: 0
         }
-        this.music.play(musicConfig);
+
+        let isMusicPlaying = localStorage.getItem('isMusicPlaying') ? (localStorage.getItem('isMusicPlaying') === 'true' ? true : false) : true ;
+        console.log(isMusicPlaying);
+        console.log(typeof isMusicPlaying);
+
+        let wasPlayedOnLoad = false;
+        if(isMusicPlaying) {
+            this.music.play(musicConfig);
+            wasPlayedOnLoad = true;
+        }
+        const toggleMusic = () => {
+            if (isMusicPlaying) {
+                this.music.pause();
+                localStorage.setItem('isMusicPlaying', false);
+            } else {
+                if(wasPlayedOnLoad) {
+                    this.music.resume();
+                    localStorage.setItem('isMusicPlaying', true);
+                }
+                else {
+                    this.music.play(musicConfig);
+                    localStorage.setItem('isMusicPlaying', true);
+                }
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        this.add.bitmapText(10, 10, 'arcade', 'jjj', 16)
+            .setInteractive()
+            .on('pointerdown', () => {
+                console.log('clicked');
+                toggleMusic();
+            });
     },
     update: function () {
         if (turnManager.over()) {
             turnManager.refresh();
         }
         turnManager.turn();
-    }
+    },
 }
 
 export default world;

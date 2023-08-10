@@ -19,13 +19,13 @@ const ui = {
                 let y = 10;
                 for(let entity of iterator) {
                     if( typeof entity.createUI === 'function') {
-                        let height = entity.createUI({
-                            scene: this,
-                            x,
-                            y,
-                            width: 198
-                        });
-                        y += height;
+                            let height = entity.createUI({
+                                scene: this,
+                                x,
+                                y,
+                                width: 198
+                            });
+                            y += height;
                     }
                 }
                 this.add.line(x+5, y, 0, 10, 175, 10, 0xcfc6b8).setOrigin(0)
