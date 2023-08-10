@@ -1,5 +1,6 @@
 import dungeon from "../dungeon.js";
 import turnManager from "../turnManager.js";
+import BlessingPotion from "../items/blessingPotion.js";
 import CursedSceptre from "../items/cursedSceptre.js";
 
 export default class Bat {
@@ -50,13 +51,28 @@ export default class Bat {
 
     onDestroy() {
         dungeon.log(`${this.name} has been destroyed!`);
-        turnManager.addEntity(new CursedSceptre(this.x, this.y));
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
         this.HPtext.setAlpha(0.2);
         this.HPtext.setText(
             `HP: 0`
         );
+
+        let dropTable = [
+            false,
+            false,
+            BlessingPotion,
+            BlessingPotion,
+            false,
+            false,
+            CursedSceptre,
+        ];
+        let lootIndex = Phaser.Math.Between(0, dropTable.length - 1);
+        if(dropTable[lootIndex]) {
+            let item = dropTable[lootIndex];
+            turnManager.addEntity(new item(this.x, this.y));
+            dungeon.log(`${this.name} dropped something`);
+        }
     }
 
     over() {
