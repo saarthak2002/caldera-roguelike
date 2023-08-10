@@ -4,7 +4,7 @@ import BasicSword from "./items/basicSword.js";
 export default class PlayerCharacter {
     constructor(x, y) {
         this.name = 'The Player';
-        this.movementPoints = 1;
+        this.movementPoints = 3;
         this.actionPoints = 1;
         this.healthPoints = 15;
         this.cursors = dungeon.scene.input.keyboard.createCursorKeys();
@@ -34,7 +34,7 @@ export default class PlayerCharacter {
     }
 
     refresh() {
-        this.movementPoints = 1;
+        this.movementPoints = 3;
         this.actionPoints = 1;
     }
 
