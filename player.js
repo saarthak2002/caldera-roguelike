@@ -63,6 +63,7 @@ export default class PlayerCharacter {
                 moved = true;
             }
             if (moved) {
+                
                 this.movementPoints -= 1;
 
                 if(!dungeon.isWalkableTile(newX, newY)) { // enemy attack
@@ -93,6 +94,7 @@ export default class PlayerCharacter {
                 }
 
                 if(newX !== oldX || newY !== oldY) {
+                    dungeon.footsteps.play();
                     dungeon.moveEntityTo(this, newX, newY);
                 }
             }
@@ -105,6 +107,8 @@ export default class PlayerCharacter {
         }
         if(this.healthPoints <= 0) {
             this.healthPoints = 15;
+            dungeon.scene.events.emit('gameover');
+            dungeon.gameover.play();
             alert(`Game Over: ${this.name} has been destroyed!`);
             location.reload();
         }
@@ -120,6 +124,8 @@ export default class PlayerCharacter {
     }
 
     onDestroy() {
+        dungeon.scene.events.emit('gameover');
+        dungeon.gameover.play();
         alert(`Game Over: ${this.name} has been destroyed!`);
         location.reload();
     }

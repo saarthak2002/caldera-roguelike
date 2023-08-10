@@ -31,6 +31,8 @@ const world = {
         this.load.audio('pickup', 'assets/audio/Rise02.mp3');
         this.load.audio('necromancer', 'assets/audio/necro_scream.mp3');
         this.load.audio('massiveHit', 'assets/audio/massiveHit.mp3');
+        this.load.audio('footseps', 'assets/audio/footstep09.ogg');
+        this.load.audio('gameover', 'assets/audio/gameover.mp3');
     },
     create: function () {
         dungeon.initialize(this);
@@ -44,6 +46,8 @@ const world = {
         dungeon.pickupSound = this.sound.add('pickup');
         dungeon.necromancerScream = this.sound.add('necromancer');
         dungeon.massiveHit = this.sound.add('massiveHit');
+        dungeon.footsteps = this.sound.add('footseps');
+        dungeon.gameover = this.sound.add('gameover');
 
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
@@ -68,7 +72,10 @@ const world = {
         camera.startFollow(dungeon.player.sprite);
         this.events.emit('createUI');
 
-
+        this.scene.get('world-scene').events.on('gameover', () => {
+            console.log('Game over');
+            this.music.stop();
+        });
         this.music = this.sound.add('music');
         let musicConfig = {
             mute: false,
@@ -83,7 +90,6 @@ const world = {
         let isMusicPlaying = localStorage.getItem('isMusicPlaying') ? (localStorage.getItem('isMusicPlaying') === 'true' ? true : false) : true ;
         console.log(isMusicPlaying);
         console.log(typeof isMusicPlaying);
-
         let wasPlayedOnLoad = false;
         if(isMusicPlaying) {
             this.music.play(musicConfig);
