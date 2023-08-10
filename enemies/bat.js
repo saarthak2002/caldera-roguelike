@@ -1,4 +1,6 @@
 import dungeon from "../dungeon.js";
+import turnManager from "../turnManager.js";
+import CursedSceptre from "../items/cursedSceptre.js";
 
 export default class Bat {
     constructor(x, y) {
@@ -47,6 +49,7 @@ export default class Bat {
 
     onDestroy() {
         dungeon.log(`${this.name} has been destroyed!`);
+        turnManager.addEntity(new CursedSceptre(this.x, this.y));
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
         this.HPtext.setAlpha(0.2);

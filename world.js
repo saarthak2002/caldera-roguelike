@@ -10,6 +10,9 @@ import wizardAltar from "./structures/wizardAltar.js";
 import Blacksmith from "./npcs/blacksmith.js";
 import blacksmithShop from "./structures/blacksmithShop.js";
 
+import HealingPotion from "./items/healingPotion.js";
+import SharpDagger from "./items/sharpDagger.js";
+
 import Bat from "./enemies/bat.js";
 
 
@@ -24,6 +27,7 @@ const world = {
         this.load.audio('magicAttack', 'assets/audio/magic_attack.mp3');
         this.load.audio('heal', 'assets/audio/heal.mp3');
         this.load.audio('upgrade', 'assets/audio/upgrade.mp3');
+        this.load.audio('pickup', 'assets/audio/Rise02.mp3');
     },
     create: function () {
         dungeon.initialize(this);
@@ -34,17 +38,21 @@ const world = {
         dungeon.upgradeSound = this.sound.add('upgrade');
         dungeon.magicAttackSound = this.sound.add('magicAttack');
         dungeon.healSound = this.sound.add('heal');
+        dungeon.pickupSound = this.sound.add('pickup');
 
         turnManager.addEntity(dungeon.player);
         turnManager.addEntity(new BasicMonster(70, 8));
         turnManager.addEntity(new BasicMonster(45, 21));
         // turnManager.addEntity(new BasicMonster(30, 43));
-        // turnManager.addEntity(new BasicMonster(27, 43));
+        turnManager.addEntity(new BasicMonster(70, 40));
         turnManager.addEntity(new WizLord(35, 6));
         turnManager.addEntity(new Blacksmith(46, 16));
         turnManager.addEntity(new Bat(20, 11));
         // turnManager.addEntity(new Bat(53, 33));
         // turnManager.addEntity(new Bat(55, 31));
+
+        turnManager.addEntity(new HealingPotion(30, 43));
+        turnManager.addEntity(new SharpDagger(54, 32));
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);

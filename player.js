@@ -12,8 +12,11 @@ export default class PlayerCharacter {
         this.y =y;
         this.tile = 85;
         this.attackPower = 0;
+        this.defensePower = 0;
         this.type = "character";
         this.items = [];
+        this.attackBuff = '';
+        this.defenseBuff = '';
         this.items.push(new BasicSword());
         this.toggleItem(0);
 
@@ -100,6 +103,11 @@ export default class PlayerCharacter {
         if(this.healthPoints > 5) {
             this.sprite.clearTint();
         }
+        if(this.healthPoints <= 0) {
+            this.healthPoints = 15;
+            alert(`Game Over: ${this.name} has been destroyed!`);
+            location.reload();
+        }
 
         this.refreshUI();
     }
@@ -129,6 +137,11 @@ export default class PlayerCharacter {
                 `Hp: ${this.healthPoints}\nMp: ${this.movementPoints}\nAp: ${this.actionPoints}`
             );
         }
+        if(this.UIbuffText) {
+            this.UIbuffText.setText(
+                `${this.attackBuff}\n${this.defenseBuff}`
+            );
+        }
         return isOver;
     }
 
@@ -153,6 +166,16 @@ export default class PlayerCharacter {
             x+20,
             y+20,
             `Hp: ${this.healthPoints}\nMp: ${this.movementPoints}\nAp: ${this.actionPoints}`,
+            {
+                font: '12px Arial',
+                color: '#cfc6b8',
+            }
+        );
+
+        this.UIbuffText = this.UIscene.add.text(
+            x+70,
+            y+20,
+            `${this.attackBuff}\n${this.defenseBuff}`,
             {
                 font: '12px Arial',
                 color: '#cfc6b8',
@@ -238,5 +261,19 @@ export default class PlayerCharacter {
 
     equippedItems() {
         return this.items.filter(item => item.active);
+    }
+
+    addAttackBuff(buff) {
+        if(buff > this.attackPower) {
+            this.attackPower = buff;
+            this.attackBuff = `Attack ↑ ${buff}`;
+        }
+    }
+
+    addDefenseBuff(buff) {
+        if(buff > this.defensePower) {
+            this.defensePower = buff;
+            this.defenseBuff = `Defense ↑ ${buff}`;
+        }
     }
 }

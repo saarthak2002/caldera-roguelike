@@ -136,7 +136,12 @@ let dungeon = {
                 attackingEntity.tweens -= 1;
 
                 let damage = attackingEntity.attack();
+                
+                if(victimEntity.defensePower) {
+                    damage -= victimEntity.defensePower;
+                }
                 victimEntity.healthPoints -= damage;
+                
                 this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
 
                 if(victimEntity.healthPoints <= 0) {
@@ -159,6 +164,7 @@ let dungeon = {
         entity.onDestroy();
     },
     itemPicked: function (entity) {
+        this.pickupSound.play();
         entity.sprite.destroy();
         delete entity.sprite;
     },

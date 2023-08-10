@@ -1,4 +1,6 @@
 import dungeon from "../dungeon.js";
+import turnManager from "../turnManager.js";
+import SoldiersShield from "../items/soldiersShield.js";
 
 export default class WizLord {
     constructor(x, y) {
@@ -53,6 +55,7 @@ export default class WizLord {
         dungeon.player.healthPoints += 5;
         dungeon.healSound.play();
         dungeon.log(`${dungeon.player.name} has gained 5 HP!`);
+        turnManager.addEntity(new SoldiersShield(this.x, this.y));
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
         this.HPtext.setAlpha(0.2);

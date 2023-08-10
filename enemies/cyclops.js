@@ -1,4 +1,7 @@
 import dungeon from "../dungeon.js";
+import turnManager from "../turnManager.js";
+import LessserHealingPotion from "../items/lesserHealingPotion.js";
+import BlessingPotion from "../items/blessingPotion.js";
 
 export default class BasicMonster {
     constructor(x, y) {
@@ -53,6 +56,20 @@ export default class BasicMonster {
         this.HPtext.setText(
             `HP: 0`
         );
+
+        let dropTable = [
+            false,
+            false,
+            LessserHealingPotion,
+            BlessingPotion,
+        ];
+        let lootIndex = Phaser.Math.Between(0, dropTable.length - 1);
+        if(dropTable[lootIndex]) {
+            let item = dropTable[lootIndex];
+            turnManager.addEntity(new item(this.x, this.y));
+            dungeon.log(`${this.name} dropped something`);
+        }
+
     }
 
     over() {
