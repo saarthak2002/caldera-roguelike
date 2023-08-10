@@ -93,26 +93,46 @@ const world = {
             if (isMusicPlaying) {
                 this.music.pause();
                 localStorage.setItem('isMusicPlaying', false);
+                this.musicButton.setText(
+                    `Music: Off`
+                );
             } else {
                 if(wasPlayedOnLoad) {
                     this.music.resume();
                     localStorage.setItem('isMusicPlaying', true);
+                    this.musicButton.setText(
+                        `Music: On`
+                    );
                 }
                 else {
                     this.music.play(musicConfig);
                     localStorage.setItem('isMusicPlaying', true);
+                    this.musicButton.setText(
+                        `Music: On`
+                    );
                 }
             }
             isMusicPlaying = !isMusicPlaying;
         }
-        
-        this.add.bitmapText(10, 10, 'arcade', 'jjj', 16)
-            .setInteractive()
-            .on('pointerdown', () => {
-                console.log('clicked');
-                toggleMusic();
-            });
+
+        this.musicButton = this.add.text(
+            10,
+            10,
+            `Music: ${isMusicPlaying ? 'On' : 'Off'}`, 
+            {
+                font: '16px Arial',
+                color: '#ffffff',
+            },
+        )
+        .setInteractive()
+        .on('pointerdown', () => {
+            console.log('clicked');
+            toggleMusic();
+        });
+        this.musicButton.fixedToCamera = true;
+        this.musicButton.setScrollFactor(0);
     },
+
     update: function () {
         if (turnManager.over()) {
             turnManager.refresh();
