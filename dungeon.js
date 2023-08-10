@@ -115,7 +115,7 @@ let dungeon = {
             return false;
         }
     },
-    attackEntity: function (attackingEntity, victimEntity) {
+    attackEntity: function (attackingEntity, victimEntity, rangedAttack = false) {
         attackingEntity.moving = true;
         attackingEntity.tweens = attackingEntity.tweens || 0;
         attackingEntity.tweens += 1;
@@ -130,35 +130,72 @@ let dungeon = {
             this.attackSound.play();
         }
         
-        this.scene.tweens.add({
-            targets: attackingEntity.sprite,
-            onComplete: () => {
-                attackingEntity.sprite.x = this.map.tileToWorldX(attackingEntity.x);
-                attackingEntity.sprite.y = this.map.tileToWorldY(attackingEntity.y);
-                attackingEntity.moving = false;
-                attackingEntity.tweens -= 1;
+        if(!rangedAttack) {
+            this.scene.tweens.add({
+                targets: attackingEntity.sprite,
+                onComplete: () => {
+                    attackingEntity.sprite.x = this.map.tileToWorldX(attackingEntity.x);
+                    attackingEntity.sprite.y = this.map.tileToWorldY(attackingEntity.y);
+                    attackingEntity.moving = false;
+                    attackingEntity.tweens -= 1;
+    
+                    let damage = attackingEntity.attack() - victim.protection();
+                    
+                    // if(victimEntity.defensePower) {
+                    //     damage -= victimEntity.defensePower;
+                    // }
 
-                let damage = attackingEntity.attack();
-                
-                if(victimEntity.defensePower) {
-                    damage -= victimEntity.defensePower;
-                }
-                victimEntity.healthPoints -= damage;
+                    if(damage > 0) {
+                        victimEntity.healthPoints -= damage;
+    
+                        this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
+        
+                        if(victimEntity.healthPoints <= 0) {
+                            this.removeEntity(victimEntity);
+                        }
+                    }
+                },
+                x: this.map.tileToWorldX(victimEntity.x),
+                y: this.map.tileToWorldY(victimEntity.y),
+                ease: 'Power2',
+                hold: 20,
+                duration: 80,
+                delay: attackingEntity.tweens * 200,
+                yoyo: true
+            });
+        }
+        else {
+            const x = this.map.tileToWorldX(attackingEntity.x);
+            const y = this.map.tileToWorldY(attackingEntity.y);
+            const sprite = this.scene.add.sprite(x, y, 'tiles', rangedAttack).setOrigin(0);
 
-                this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
+            this.scene.tweens.add({
+                targets: attackingEntity.sprite,
+                onComplete: () => {
+                    attackingEntity.moving = false;
+                    attackingEntity.tweens -= 1;
+    
+                    let damage = attackingEntity.attack() - victim.protection();
 
-                if(victimEntity.healthPoints <= 0) {
-                    this.removeEntity(victimEntity);
-                }
-            },
-            x: this.map.tileToWorldX(victimEntity.x),
-            y: this.map.tileToWorldY(victimEntity.y),
-            ease: 'Power2',
-            hold: 20,
-            duration: 80,
-            delay: attackingEntity.tweens * 200,
-            yoyo: true
-        });
+                    if(damage > 0) {
+                        victimEntity.healthPoints -= damage;
+    
+                        this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
+        
+                        if(victimEntity.healthPoints <= 0) {
+                            this.removeEntity(victimEntity);
+                        }
+                    }
+                    sprite.destroy();
+                },
+                x: this.map.tileToWorldX(victimEntity.x),
+                y: this.map.tileToWorldY(victimEntity.y),
+                ease: 'Power2',
+                hold: 20,
+                duration: 180,
+                delay: attackingEntity.tweens * 200,
+            });
+        }
     },
     removeEntity: function (entity) {
         turnManager.entities.delete(entity);
