@@ -18,4 +18,8 @@ export default class SoldiersShield extends GenericItem {
         dungeon.player.addDefenseBuff(1);
         dungeon.player.removeItem(itemNumber);
     }
+
+    protection() {
+        return 1;
+    }
 }

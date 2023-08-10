@@ -133,10 +133,10 @@ export default class PlayerCharacter {
     over() {
         let isOver = this.movementPoints == 0 && !this.moving;
         if(isOver && this.UIheader) {
-            this.UIheader.setColor('#cfc6b8')
+            this.UIheader.setColor('#cfc6b8');
         }
         else {
-            this.UIheader.setColor('#50C878')
+            this.UIheader.setColor('#50C878');
         }
         if(this.UIstatsText) {
             this.UIstatsText.setText(
@@ -281,5 +281,9 @@ export default class PlayerCharacter {
             this.defensePower = buff;
             this.defenseBuff = `Defense ↑ ${buff}`;
         }
+    }
+
+    protection() {
+        return 0;
     }
 }

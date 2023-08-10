@@ -101,4 +101,8 @@ export default class Bat {
         this.HPtext = scene.add.text(x + 20, y + 15, `HP: ${this.healthPoints}`, { font: '9px Arial', fill: '#a8a196' });
         return 30;
     }
+
+    protection() {
+        return 0;
+    }
 }

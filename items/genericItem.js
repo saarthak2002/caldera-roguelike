@@ -39,4 +39,12 @@ export default class GenericItem {
     createUI() {
         return 0;
     }
+
+    protection() {
+        return 0;
+    }
+
+    range() {
+        return 0;
+    }
 }

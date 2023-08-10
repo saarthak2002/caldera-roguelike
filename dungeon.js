@@ -115,88 +115,87 @@ let dungeon = {
             return false;
         }
     },
-    attackEntity: function (attackingEntity, victimEntity, rangedAttack = false) {
-        attackingEntity.moving = true;
-        attackingEntity.tweens = attackingEntity.tweens || 0;
-        attackingEntity.tweens += 1;
-        
-        if(attackingEntity.name === 'A Poweful Wizard') {
+
+    attackEntity: function (attacker, victim, rangedAttack = false) {
+        attacker.moving = true
+        attacker.tweens = attacker.tweens || 0
+        attacker.tweens += 1
+
+        if(attacker.name === 'A Poweful Wizard') {
             this.magicAttackSound.play();
         }
-        else if(attackingEntity.name === 'A Necromancer') {
+        else if(attacker.name === 'A Necromancer') {
             this.massiveHit.play();
         }
         else {
             this.attackSound.play();
         }
-        
-        if(!rangedAttack) {
-            this.scene.tweens.add({
-                targets: attackingEntity.sprite,
-                onComplete: () => {
-                    attackingEntity.sprite.x = this.map.tileToWorldX(attackingEntity.x);
-                    attackingEntity.sprite.y = this.map.tileToWorldY(attackingEntity.y);
-                    attackingEntity.moving = false;
-                    attackingEntity.tweens -= 1;
-    
-                    let damage = attackingEntity.attack() - victim.protection();
-                    
-                    // if(victimEntity.defensePower) {
-                    //     damage -= victimEntity.defensePower;
-                    // }
 
-                    if(damage > 0) {
-                        victimEntity.healthPoints -= damage;
-    
-                        this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
-        
-                        if(victimEntity.healthPoints <= 0) {
-                            this.removeEntity(victimEntity);
+        if (!rangedAttack) {
+            this.scene.tweens.add({
+                targets: attacker.sprite,
+                onComplete: () => {
+                    attacker.sprite.x = this.map.tileToWorldX(attacker.x)
+                    attacker.sprite.y = this.map.tileToWorldX(attacker.y)
+                    attacker.moving = false
+                    attacker.tweens -= 1
+
+                    let attack = attacker.attack()
+                    let protection = victim.protection()
+                    let damage = attack - protection
+                    if (damage > 0) {
+                        victim.healthPoints -= damage
+
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`)
+
+                        if (victim.healthPoints <= 0) {
+                            this.removeEntity(victim)
                         }
                     }
                 },
-                x: this.map.tileToWorldX(victimEntity.x),
-                y: this.map.tileToWorldY(victimEntity.y),
-                ease: 'Power2',
+                x: this.map.tileToWorldX(victim.x),
+                y: this.map.tileToWorldY(victim.y),
+                ease: "Power2",
                 hold: 20,
                 duration: 80,
-                delay: attackingEntity.tweens * 200,
+                delay: attacker.tweens * 200,
                 yoyo: true
-            });
-        }
-        else {
-            const x = this.map.tileToWorldX(attackingEntity.x);
-            const y = this.map.tileToWorldY(attackingEntity.y);
-            const sprite = this.scene.add.sprite(x, y, 'tiles', rangedAttack).setOrigin(0);
+            })
+        } else {
+            const x = this.map.tileToWorldX(attacker.x)
+            const y = this.map.tileToWorldX(attacker.y)
+            const sprite = dungeon.scene.add.sprite(x, y, "tiles", rangedAttack).setOrigin(0)
 
             this.scene.tweens.add({
-                targets: attackingEntity.sprite,
+                targets: sprite,
                 onComplete: () => {
-                    attackingEntity.moving = false;
-                    attackingEntity.tweens -= 1;
-    
-                    let damage = attackingEntity.attack() - victim.protection();
+                    attacker.moving = false
+                    attacker.tweens -= 1
 
-                    if(damage > 0) {
-                        victimEntity.healthPoints -= damage;
-    
-                        this.log(`${attackingEntity.name} does ${damage} damage to ${victimEntity.name} which now has ${victimEntity.healthPoints} HP left!`);
-        
-                        if(victimEntity.healthPoints <= 0) {
-                            this.removeEntity(victimEntity);
+                    let attack = attacker.attack()
+                    let protection = victim.protection()
+                    let damage = attack - protection
+                    if (damage > 0) {
+                        victim.healthPoints -= damage
+
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`)
+
+                        if (victim.healthPoints <= 0) {
+                            this.removeEntity(victim)
                         }
                     }
-                    sprite.destroy();
+                    sprite.destroy()
                 },
-                x: this.map.tileToWorldX(victimEntity.x),
-                y: this.map.tileToWorldY(victimEntity.y),
-                ease: 'Power2',
+                x: this.map.tileToWorldX(victim.x),
+                y: this.map.tileToWorldY(victim.y),
+                ease: "Power2",
                 hold: 20,
                 duration: 180,
-                delay: attackingEntity.tweens * 200,
-            });
+                delay: attacker.tweens * 200
+            })
         }
     },
+
     removeEntity: function (entity) {
         turnManager.entities.delete(entity);
         entity.sprite.destroy();

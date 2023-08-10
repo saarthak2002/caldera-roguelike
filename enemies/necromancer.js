@@ -115,4 +115,8 @@ export default class Necromancer {
         this.HPtext.setAlpha(0);
         return 30;
     }
+
+    protection() {
+        return 0;
+    }
 }

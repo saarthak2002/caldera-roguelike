@@ -16,6 +16,7 @@ import SharpDagger from "./items/sharpDagger.js";
 import Necromancer from "./enemies/necromancer.js";
 import Bat from "./enemies/bat.js";
 
+import classes from "./classes.js";
 
 const world = {
     key: 'world-scene',
@@ -36,7 +37,7 @@ const world = {
     },
     create: function () {
         dungeon.initialize(this);
-        dungeon.player = new PlayerCharacter(15, 15);
+        dungeon.player = new classes.Elf(15, 15);
         dungeon.create3by3Structure(35, 6, wizardAltar);
         dungeon.create3by3Structure(45, 16, blacksmithShop);
         dungeon.attackSound = this.sound.add('attack');
