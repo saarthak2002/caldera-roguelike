@@ -72,6 +72,7 @@ export default class Necromancer {
 
     onDestroy() {
         dungeon.log(`${this.name} has been destroyed!`);
+        dungeon.necromancerScream.play();
         turnManager.addEntity(new CursedSceptre(this.x, this.y));
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
@@ -79,7 +80,7 @@ export default class Necromancer {
         this.HPtext.setText(
             `HP: 0`
         );
-
+        
         dungeon.player.removeItemByProperty('curseOfDeath', true);
     }
 

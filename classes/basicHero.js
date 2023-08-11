@@ -318,10 +318,9 @@ export default class BasicHero {
                 let x = this.UIitems[i].x + 10;
                 let y = this.UIitems[i].y + 10;
                 item.UIsprite = this.UIscene.add.sprite(x, y, 'tiles', item.tile);
-
-                if(item.tint) {
-                    this.UIsprite.tint = item.tint;
-                    this.UIsprite.tintFill = true;
+                if (item.tint) {
+                    item.UIsprite.tint = item.tint
+                    // item.UIsprite.tintFill = true
                 }
             }
             if(!item.active) {

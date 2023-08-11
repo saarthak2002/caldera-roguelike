@@ -1,3 +1,4 @@
+import BasicHero from "./classes/basicHero.js";
 import level from "./level.js";
 import turnManager from "./turnManager.js";
 
@@ -124,13 +125,24 @@ let dungeon = {
         attacker.moving = true;
         attacker.tweens = attacker.tweens || 0;
         attacker.tweens += 1;
-
+        console.log(attacker);
         if(attacker.name === 'A Poweful Wizard') {
             this.magicAttackSound.play();
         }
         else if(attacker.name === 'A Necromancer') {
             this.massiveHit.play();
         }
+
+        else if(attacker instanceof BasicHero) {
+            console.log('hi');
+            if(attacker.currentWeapon().magic) {
+                this.magicAttackSound.play();
+            }
+            else {
+                this.attackSound.play();
+            }
+        }
+        
         else {
             this.attackSound.play();
         }
