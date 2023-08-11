@@ -49,6 +49,10 @@ let dungeon = {
             let y = this.map.tileToWorldY(entity.y);
             entity.sprite = this.scene.add.sprite(x, y, 'tiles', entity.tile);
             entity.sprite.setOrigin(0);
+            if(entity.tint) {
+                entity.UIsprite.tint = entity.tint;
+                entity.UIsprite.tintFill = true;
+            }
         }
     },
     moveEntityTo: function (entity, x, y) {
@@ -116,10 +120,10 @@ let dungeon = {
         }
     },
 
-    attackEntity: function (attacker, victim, rangedAttack = false) {
-        attacker.moving = true
-        attacker.tweens = attacker.tweens || 0
-        attacker.tweens += 1
+    attackEntity: function (attacker, victim, rangedAttack = false, tint = false) {
+        attacker.moving = true;
+        attacker.tweens = attacker.tweens || 0;
+        attacker.tweens += 1;
 
         if(attacker.name === 'A Poweful Wizard') {
             this.magicAttackSound.play();
@@ -135,21 +139,21 @@ let dungeon = {
             this.scene.tweens.add({
                 targets: attacker.sprite,
                 onComplete: () => {
-                    attacker.sprite.x = this.map.tileToWorldX(attacker.x)
-                    attacker.sprite.y = this.map.tileToWorldX(attacker.y)
-                    attacker.moving = false
-                    attacker.tweens -= 1
+                    attacker.sprite.x = this.map.tileToWorldX(attacker.x);
+                    attacker.sprite.y = this.map.tileToWorldX(attacker.y);
+                    attacker.moving = false;
+                    attacker.tweens -= 1;
 
-                    let attack = attacker.attack()
-                    let protection = victim.protection()
-                    let damage = attack - protection
+                    let attack = attacker.attack();
+                    let protection = victim.protection();
+                    let damage = attack - protection;
                     if (damage > 0) {
-                        victim.healthPoints -= damage
+                        victim.healthPoints -= damage;
 
-                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`)
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`);
 
                         if (victim.healthPoints <= 0) {
-                            this.removeEntity(victim)
+                            this.removeEntity(victim);
                         }
                     }
                 },
@@ -160,29 +164,34 @@ let dungeon = {
                 duration: 80,
                 delay: attacker.tweens * 200,
                 yoyo: true
-            })
+            });
         }
         else {
-            const x = this.map.tileToWorldX(attacker.x)
-            const y = this.map.tileToWorldX(attacker.y)
-            const sprite = dungeon.scene.add.sprite(x, y, "tiles", rangedAttack).setOrigin(0)
+            const x = this.map.tileToWorldX(attacker.x);
+            const y = this.map.tileToWorldX(attacker.y);
+            const sprite = dungeon.scene.add.sprite(x, y, "tiles", rangedAttack).setOrigin(0);
+
+            if (tint) {
+                sprite.tint = tint;
+                sprite.tintFill = true;
+            }
 
             this.scene.tweens.add({
                 targets: sprite,
                 onComplete: () => {
-                    attacker.moving = false
-                    attacker.tweens -= 1
+                    attacker.moving = false;
+                    attacker.tweens -= 1;
 
-                    let attack = attacker.attack()
-                    let protection = victim.protection()
-                    let damage = attack - protection
+                    let attack = attacker.attack();
+                    let protection = victim.protection();
+                    let damage = attack - protection;
                     if (damage > 0) {
-                        victim.healthPoints -= damage
+                        victim.healthPoints -= damage;
 
-                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`)
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`);
 
                         if (victim.healthPoints <= 0) {
-                            this.removeEntity(victim)
+                            this.removeEntity(victim);
                         }
                     }
                     sprite.destroy()
@@ -193,7 +202,7 @@ let dungeon = {
                 hold: 20,
                 duration: 180,
                 delay: attacker.tweens * 200
-            })
+            });
         }
     },
 

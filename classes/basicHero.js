@@ -175,7 +175,8 @@ export default class BasicHero {
                 if(entity && entity.type === 'enemy' && this.actionPoints > 0) {
                     const currentWeapon = this.currentWeapon();
                     const rangeAttack = currentWeapon.range() > 0 ? (currentWeapon.attackTile || currentWeapon.tile) : false;
-                    dungeon.attackEntity(this, entity, rangeAttack);
+                    const tint = currentWeapon.tint || false;
+                    dungeon.attackEntity(this, entity, rangeAttack, tint);
                     this.actionPoints -= 1;
                     this.movementPoints += 1;
                 }
@@ -211,12 +212,13 @@ export default class BasicHero {
 
         let entity = dungeon.entityAtTile(x, y);
         if (entity && entity.type == "enemy" && this.actionPoints > 0) {
-            const currentWeapon = this.currentWeapon()
-            const rangedAttack = currentWeapon.range() > 0 ? currentWeapon.attackTile || currentWeapon.tile : false
-            const distance = dungeon.distanceBetweenEntities(this, entity)
+            const currentWeapon = this.currentWeapon();
+            const rangedAttack = currentWeapon.range() > 0 ? currentWeapon.attackTile || currentWeapon.tile : false;
+            const tint = currentWeapon.tint || false;
+            const distance = dungeon.distanceBetweenEntities(this, entity);
             if (rangedAttack && distance <= currentWeapon.range()) {
-                dungeon.attackEntity(this, entity, rangedAttack)
-                this.actionPoints -= 1
+                dungeon.attackEntity(this, entity, rangedAttack, tint);
+                this.actionPoints -= 1;
             }
         }
     }
@@ -316,6 +318,11 @@ export default class BasicHero {
                 let x = this.UIitems[i].x + 10;
                 let y = this.UIitems[i].y + 10;
                 item.UIsprite = this.UIscene.add.sprite(x, y, 'tiles', item.tile);
+
+                if(item.tint) {
+                    this.UIsprite.tint = item.tint;
+                    this.UIsprite.tintFill = true;
+                }
             }
             if(!item.active) {
                 item.UIsprite.setAlpha(0.5);
