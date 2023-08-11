@@ -37,7 +37,11 @@ const world = {
     },
     create: function () {
         dungeon.initialize(this);
-        dungeon.player = new classes.Sorcerer(15, 15);
+
+        const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
+        const player =archtypes[Math.floor(Math.random() * archtypes.length)]
+
+        dungeon.player = new player(15, 15);
         dungeon.create3by3Structure(35, 6, wizardAltar);
         dungeon.create3by3Structure(45, 16, blacksmithShop);
         dungeon.attackSound = this.sound.add('attack');
