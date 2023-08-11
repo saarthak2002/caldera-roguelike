@@ -10,7 +10,7 @@ export default class Elf extends BasicHero {
         this.movementPoints = 4;
         this.actionPoints = 3;
         this.healthPoints = 20;
-        this.tile = 112;
+        this.tile = 100;
 
         this.items.push(new Bow());
         this.toggleItem(0);

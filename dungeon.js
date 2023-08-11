@@ -161,7 +161,8 @@ let dungeon = {
                 delay: attacker.tweens * 200,
                 yoyo: true
             })
-        } else {
+        }
+        else {
             const x = this.map.tileToWorldX(attacker.x)
             const y = this.map.tileToWorldX(attacker.y)
             const sprite = dungeon.scene.add.sprite(x, y, "tiles", rangedAttack).setOrigin(0)
