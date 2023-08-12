@@ -1,7 +1,9 @@
 import dungeon from "../dungeon.js";
+import Taggable from "../taggable.js";
 
-export default class BasicHero {
+export default class BasicHero extends Taggable {
     constructor(x, y) {
+        super(x,y);
         this.name = "The Hero";
         this.movementPoints = 1;
         this.actionPoints = 1;

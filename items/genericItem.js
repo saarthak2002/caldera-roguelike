@@ -1,5 +1,8 @@
-export default class GenericItem {
+import Taggable from "../taggable";
+
+export default class GenericItem extends Taggable {
     constructor(x,y) {
+        super(x,y);
         this.active = false;
         this.type = 'item';
         this.weapon = false;

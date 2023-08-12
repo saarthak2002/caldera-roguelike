@@ -1,19 +1,32 @@
 import dungeon from "../dungeon.js";
+import BasicEnemy from "./basicEnemy.js";
 import turnManager from "../turnManager.js";
 import LessserHealingPotion from "../items/lesserHealingPotion.js";
 import BlessingPotion from "../items/blessingPotion.js";
 
-export default class BasicMonster {
+export default class BasicMonster extends BasicEnemy {
     constructor(x, y) {
-        this.name = 'A Weak Monster';
-        this.movementPoints = 1;
+        this.name = 'Cyclops';
+        this.movementPoints = 3;
         this.actionPoints = 1;
-        this.healthPoints = 3;
+        this.healthPoints = 4;
+        this.refreshRates = {
+            movementPoints: 3,
+            actionPoints: 1,
+            healthPoints: 0
+        };
+        this.damage = {
+            max: 4,
+            min: 1
+        }
+
         this.x = x;
         this.y = y;
         this.tile = 109;
         this.type = "enemy";
         this.active = true;
+        this.weapon.name = 'club';
+
         dungeon.initializeEntity(this);
     }
     refresh() {
