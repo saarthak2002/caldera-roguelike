@@ -62,7 +62,7 @@ export default class BasicHero extends Taggable {
     
             if(item.active) {
                 dungeon.log(`${this.name} equipped ${item.name}: ${item.description}.`);
-                item.equip(itemNumber);
+                item.equip(itemNumber, this);
             }
         }
     }
