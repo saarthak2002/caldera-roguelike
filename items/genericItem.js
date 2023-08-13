@@ -1,4 +1,4 @@
-import Taggable from "../taggable";
+import Taggable from "../taggable.js";
 
 export default class GenericItem extends Taggable {
     constructor(x,y) {

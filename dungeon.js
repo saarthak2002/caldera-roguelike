@@ -121,11 +121,14 @@ let dungeon = {
         }
     },
 
-    attackEntity: function (attacker, victim, rangedAttack = false, tint = false) {
+    attackEntity: function (attacker, victim, weapon) {
         attacker.moving = true;
         attacker.tweens = attacker.tweens || 0;
         attacker.tweens += 1;
-        console.log(attacker);
+
+        let rangedAttack = weapon.range() ? weapon.attackTile : false;
+        let tint = weapon.range() && weapon.tint ? weapon.tint : false;
+
         if(attacker.name === 'A Poweful Wizard') {
             this.magicAttackSound.play();
         }
@@ -142,7 +145,7 @@ let dungeon = {
                 this.attackSound.play();
             }
         }
-        
+
         else {
             this.attackSound.play();
         }
@@ -162,7 +165,8 @@ let dungeon = {
                     if (damage > 0) {
                         victim.healthPoints -= damage;
 
-                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`);
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name} with ${weapon.name}.`);
+                        weapon.executeTag("damagedEntity", victim);
 
                         if (victim.healthPoints <= 0) {
                             this.removeEntity(victim);
@@ -200,7 +204,8 @@ let dungeon = {
                     if (damage > 0) {
                         victim.healthPoints -= damage;
 
-                        this.log(`${attacker.name} does ${damage} damage to ${victim.name}.`);
+                        this.log(`${attacker.name} does ${damage} damage to ${victim.name} with ${weapon.name}.`);
+                        weapon.executeTag("damagedEntity", victim);
 
                         if (victim.healthPoints <= 0) {
                             this.removeEntity(victim);
@@ -249,6 +254,45 @@ let dungeon = {
         this.map.putTileAt(structure[0][2], originX+1, originY-2);
         this.level[originY-2][originX+1] = 1;
     },
+
+    describeEntity: function (entity) {
+        if(entity) {
+            let name = entity.name;
+            let description = entity.description || "";
+            let tags = entity._tags ? 
+                entity._tags.map(tag => `#${tag}`).join(", ") 
+            : 
+                "";
+            dungeon.log(`${name}\n${tags}\n${description}`);
+        }
+    },
+
+    randomWalkableTile: function () {
+        let x = Phaser.Math.Between(0, this.level[0].length - 1);
+        let y = Phaser.Math.Between(0, this.level.length - 1);
+        let tileAtDestination = dungeon.map.getTileAt(x, y);
+        while(typeof tileAtDestination == "undefined" 
+            || tileAtDestination.index === dungeon.sprites
+            || tileAtDestination.index === dungeon.sprites.pillarTop
+            || tileAtDestination.index === dungeon.sprites.pillarMiddle
+            || tileAtDestination.index === dungeon.sprites.pillarBottom
+            || tileAtDestination.index === dungeon.sprites.spoutDrain
+            || tileAtDestination.index === dungeon.sprites.spoutMouth
+            || tileAtDestination.index === dungeon.sprites.caveLeft
+            || tileAtDestination.index === dungeon.sprites.caveRight
+            || tileAtDestination.index === dungeon.sprites.window
+            || tileAtDestination.index === dungeon.sprites.minecart
+            || tileAtDestination.index === dungeon.sprites.anvil
+            || tileAtDestination.index === dungeon.sprites.trackLeft
+            || tileAtDestination.index === dungeon.sprites.trackRight
+            || tileAtDestination.index === dungeon.sprites.trackStraight
+        ) {
+            x = Phaser.Math.Between(0, this.level[0].length - 1);
+            y = Phaser.Math.Between(0, this.level.length - 1);
+            tileAtDestination = dungeon.map.getTileAt(x, y);
+        }
+        return {x, y};
+    }
 }
 
 export default dungeon
