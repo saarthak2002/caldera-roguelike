@@ -28,4 +28,51 @@ const tags = {
 
 };
 
+export const materials = [
+    "golden",
+    "silver",
+    "iron",
+];
+
+export const enemyModifiers = [
+    "aggro",
+    "fast",
+    "royal",
+];
+
+export const behaviors = [
+    "goingSomewhere",
+    "patrolling",
+    "hunter",
+];
+
+export const effects = [
+    "burning",
+    "poisonous",
+    "cursed",
+]
+
+export function getRandomTagsForItem(modifierCount=1, effectCount=0) {
+    let result = new Set();
+    while(modifierCount > 0) {
+        result.add(Phaser.Utils.Array.GetRandom(materials));
+        modifierCount -= 1;
+    }
+    while(effectCount > 0) {
+        result.add(Phaser.Utils.Array.GetRandom(effects));
+        effectCount -= 1;
+    }
+    return [...result];
+}
+
+export function getRandomTagsForEnemy(modifierCount = 1) {
+    let res = new Set();
+    while (modifierCount > 0) {
+        res.add(Phaser.Utils.Array.GetRandom(enemyModifiers));
+        modifierCount--;
+}
+    res.add(Phaser.Utils.Array.GetRandom(behaviors));
+    return [...res];
+}
+
 export default tags;
