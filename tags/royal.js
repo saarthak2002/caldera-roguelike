@@ -7,9 +7,9 @@ const royal = {
             this.refreshRates.movementPoints += 2;
             this.refreshRates.healthPoints += 2;
 
-            if(this.sprite) {
-                this.sprite.tint = this.tint;
-            }
+            // if(this.sprite) {
+            //     this.sprite.tint = this.tint;
+            // }
 
             this.name = `Royal ${this.name}`;
         }

@@ -11,7 +11,7 @@ export default class Slime extends BasicEnemy {
         this.refreshRates = {
             movementPoints: 2,
             actionPoints: 1,
-            healthPoints: 0
+            healthPoints: 1
         };
         this.damage = {
             max: 5,

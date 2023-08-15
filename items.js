@@ -13,6 +13,7 @@ import Shield from "./items/shield.js";
 import SoldiersShield from "./items/soldiersShield.js";
 import Broadsword from "./items/broadSword.js";
 import { getRandomTagsForItem } from "./tags.js";
+import CurseOfDeath from "./items/necromancerCurse.js";
 
 const items = {
     Axe,
@@ -28,7 +29,8 @@ const items = {
     SharpDagger,
     Shield,
     SoldiersShield,
-    Broadsword
+    Broadsword,
+    // CurseOfDeath
 }
 
 export default items;

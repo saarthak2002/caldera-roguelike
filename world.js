@@ -18,6 +18,9 @@ import Bat from "./enemies/bat.js";
 
 import classes from "./classes.js";
 
+import { getRandomItem } from "./items.js"
+import { getRandomEnemy } from "./enemies.js"
+
 const world = {
     key: 'world-scene',
     active: true,
@@ -42,8 +45,8 @@ const world = {
         const player =archtypes[Math.floor(Math.random() * archtypes.length)]
 
         dungeon.player = new player(15, 15);
-        dungeon.create3by3Structure(35, 6, wizardAltar);
-        dungeon.create3by3Structure(45, 16, blacksmithShop);
+        // dungeon.create3by3Structure(35, 6, wizardAltar);
+        // dungeon.create3by3Structure(45, 16, blacksmithShop);
         dungeon.attackSound = this.sound.add('attack');
         dungeon.upgradeSound = this.sound.add('upgrade');
         dungeon.magicAttackSound = this.sound.add('magicAttack');
@@ -54,22 +57,36 @@ const world = {
         dungeon.footsteps = this.sound.add('footseps');
         dungeon.gameover = this.sound.add('gameover');
 
-        turnManager.addEntity(dungeon.player);
-        turnManager.addEntity(new BasicMonster(70, 8));
-        turnManager.addEntity(new BasicMonster(45, 21));
-        turnManager.addEntity(new BasicMonster(30, 43));
-        turnManager.addEntity(new BasicMonster(70, 40));
-        turnManager.addEntity(new WizLord(35, 6));
-        turnManager.addEntity(new Blacksmith(46, 16));
-        turnManager.addEntity(new Bat(20, 11));
-        turnManager.addEntity(new Bat(53, 33));
-        turnManager.addEntity(new Bat(55, 31));
+        // turnManager.addEntity(dungeon.player);
+        // turnManager.addEntity(new BasicMonster(70, 8));
+        // turnManager.addEntity(new BasicMonster(45, 21));
+        // turnManager.addEntity(new BasicMonster(30, 43));
+        // turnManager.addEntity(new BasicMonster(70, 40));
+        // turnManager.addEntity(new WizLord(35, 6));
+        // turnManager.addEntity(new Blacksmith(46, 16));
+        // turnManager.addEntity(new Bat(20, 11));
+        // turnManager.addEntity(new Bat(53, 33));
+        // turnManager.addEntity(new Bat(55, 31));
 
-        turnManager.addEntity(new HealingPotion(30, 43));
-        turnManager.addEntity(new SharpDagger(54, 32));
+        // turnManager.addEntity(new HealingPotion(30, 43));
+        // turnManager.addEntity(new SharpDagger(54, 32));
 
-        turnManager.addEntity(new GraveSpirit(28, 43));
-        turnManager.addEntity(new Necromancer(57, 32));
+        // turnManager.addEntity(new GraveSpirit(28, 43));
+        // turnManager.addEntity(new Necromancer(57, 32));
+
+        turnManager.addEntity(dungeon.player)
+        let  monsterCount= 10
+        while(monsterCount> 0) {
+            let tile = dungeon.randomWalkableTile()
+            turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+            monsterCount--;
+        }
+        let itemCount = 10
+        while(itemCount > 0) {
+            let tile = dungeon.randomWalkableTile()
+            turnManager.addEntity(getRandomItem(tile.x, tile.y))
+            itemCount--;
+        }
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);

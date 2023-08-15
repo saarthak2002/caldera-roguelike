@@ -2,10 +2,10 @@ const iron = {
     name: "Iron",
     initialize: function() {
         this.name = `Iron ${this.name}`;
-        this.tint = 0xccbc00;
-        if(this.sprite) {
-            this.sprite.tint = this.tint;
-        }
+        // this.tint = 0xccbc00;
+        // if(this.sprite) {
+        //     this.sprite.tint = this.tint;
+        // }
     },
     attack(acc=0) {
         if(acc>0) {

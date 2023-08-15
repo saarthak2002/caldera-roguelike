@@ -178,12 +178,16 @@ export default class BasicHero extends Taggable {
                     const currentWeapon = this.currentWeapon();
                     const rangeAttack = currentWeapon.range() > 0 ? (currentWeapon.attackTile || currentWeapon.tile) : false;
                     const tint = currentWeapon.tint || false;
-                    dungeon.attackEntity(this, entity, rangeAttack, tint);
+                    dungeon.attackEntity(this, entity, currentWeapon);
                     this.actionPoints -= 1;
                     this.movementPoints += 1;
                 }
 
                 if(entity && entity.type === 'item' && this.actionPoints > 0) {
+                    if(this.items.length >= 10) {
+                        dungeon.log(`${this.name}'s inventory is full!`);
+                        return;
+                    }
                     this.items.push(entity);
                     dungeon.itemPicked(entity);
                     dungeon.log(`${this.name} picked up ${entity.name}: ${entity.description}.`);
@@ -219,7 +223,7 @@ export default class BasicHero extends Taggable {
             const tint = currentWeapon.tint || false;
             const distance = dungeon.distanceBetweenEntities(this, entity);
             if (rangedAttack && distance <= currentWeapon.range()) {
-                dungeon.attackEntity(this, entity, rangedAttack, tint);
+                dungeon.attackEntity(this, entity, currentWeapon);
                 this.actionPoints -= 1;
             }
         }
@@ -320,10 +324,10 @@ export default class BasicHero extends Taggable {
                 let x = this.UIitems[i].x + 10;
                 let y = this.UIitems[i].y + 10;
                 item.UIsprite = this.UIscene.add.sprite(x, y, 'tiles', item.tile);
-                if (item.tint) {
-                    item.UIsprite.tint = item.tint
-                    // item.UIsprite.tintFill = true
-                }
+                // if (item.tint) {
+                //     item.UIsprite.tint = item.tint
+                //     // item.UIsprite.tintFill = true
+                // }
             }
             if(!item.active) {
                 item.UIsprite.setAlpha(0.5);

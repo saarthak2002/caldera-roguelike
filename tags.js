@@ -12,6 +12,8 @@ import hunter from "./tags/hunter.js";
 import goingSomewhere from "./tags/goingSomewhere.js";
 import patrolling from "./tags/patrolling.js";
 
+import activateOnDeathCurse from "./tags/activateOnDeathCurse.js";
+
 const tags = {
     aggro,
     fast,
@@ -24,8 +26,8 @@ const tags = {
     cursed,
     hunter,
     goingSomewhere,
-    patrolling
-
+    patrolling,
+    // activateOnDeathCurse
 };
 
 export const materials = [
@@ -70,8 +72,15 @@ export function getRandomTagsForEnemy(modifierCount = 1) {
     while (modifierCount > 0) {
         res.add(Phaser.Utils.Array.GetRandom(enemyModifiers));
         modifierCount--;
-}
+    }
     res.add(Phaser.Utils.Array.GetRandom(behaviors));
+    return [...res];
+}
+
+export function getNecromancerTags() {
+    let res = new Set();
+    // res.add(Phaser.Utils.Array.GetRandom(enemyModifiers));
+    res.add(activateOnDeathCurse);
     return [...res];
 }
 

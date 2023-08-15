@@ -7,9 +7,9 @@ const poisonous = {
         this._poisonTurns = howManyTurns;
         if(this.type === "item") {
             this.tint = 0x002300;
-            if(this.sprite) {
-                this.sprite.tint = this.tint;
-            }
+            // if(this.sprite) {
+            //     this.sprite.tint = this.tint;
+            // }
         }
     },
 

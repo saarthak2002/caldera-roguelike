@@ -4,10 +4,10 @@ const silver = {
     name: "Silver",
     initialize: function() {
         this.name = `Sliver ${this.name}`;
-        this.tint = 0xccbc00;
-        if(this.sprite) {
-            this.sprite.tint = this.tint;
-        }
+        // this.tint = 0xccbc00;
+        // if(this.sprite) {
+        //     this.sprite.tint = this.tint;
+        // }
         if(this.type == "item") {
             this.equpipHPBonus = 2;
         }

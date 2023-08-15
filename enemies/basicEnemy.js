@@ -59,6 +59,21 @@ export default class BasicEnemy extends Taggable {
 
     }
 
+    onDestroy() {
+        dungeon.log(`${this.name} was destroyed.`);
+        this.UIsprite.setAlpha(0.2);
+        this.UItext.setAlpha(0.2);
+
+        let x = this.x;
+        let y = this.y;
+        let item = getRandomItem(x, y, 1, 1);
+
+        turnManager.addEntity(item);
+        dungeon.log(`${this.name} drops ${item.name}.`);
+
+
+    }
+
     over() {
         let isOver = this.movementPoints == 0 && this.actionPoints == 0 && !this.moving;
         if (isOver && this.UItext) {

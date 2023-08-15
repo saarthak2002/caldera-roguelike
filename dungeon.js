@@ -51,8 +51,8 @@ let dungeon = {
             entity.sprite = this.scene.add.sprite(x, y, 'tiles', entity.tile);
             entity.sprite.setOrigin(0);
             if(entity.tint) {
-                entity.UIsprite.tint = entity.tint;
-                entity.UIsprite.tintFill = true;
+                entity.sprite.tint = entity.tint;
+                entity.sprite.tintFill = true;
             }
         }
     },
@@ -224,10 +224,16 @@ let dungeon = {
     },
 
     removeEntity: function (entity) {
-        turnManager.entities.delete(entity);
-        entity.sprite.destroy();
-        delete entity.sprite;
+        if(entity.type === 'item') {
+            return;
+        }
+        if(entity.sprite) {
+            entity.sprite.destroy();
+            delete entity.sprite;
+        }
+        
         entity.onDestroy();
+        turnManager.entities.delete(entity);
     },
     itemPicked: function (entity) {
         this.pickupSound.play();
@@ -267,32 +273,44 @@ let dungeon = {
         }
     },
 
+    // randomWalkableTile: function () {
+    //     let x = Phaser.Math.Between(0, this.level[0].length - 1);
+    //     let y = Phaser.Math.Between(0, this.level.length - 1);
+    //     let tileAtDestination = dungeon.map.getTileAt(x, y);
+    //     while(typeof tileAtDestination == "undefined" 
+    //         || tileAtDestination.index === dungeon.sprites
+    //         || tileAtDestination.index === dungeon.sprites.pillarTop
+    //         || tileAtDestination.index === dungeon.sprites.pillarMiddle
+    //         || tileAtDestination.index === dungeon.sprites.pillarBottom
+    //         || tileAtDestination.index === dungeon.sprites.spoutDrain
+    //         || tileAtDestination.index === dungeon.sprites.spoutMouth
+    //         || tileAtDestination.index === dungeon.sprites.caveLeft
+    //         || tileAtDestination.index === dungeon.sprites.caveRight
+    //         || tileAtDestination.index === dungeon.sprites.window
+    //         || tileAtDestination.index === dungeon.sprites.minecart
+    //         || tileAtDestination.index === dungeon.sprites.anvil
+    //         || tileAtDestination.index === dungeon.sprites.trackLeft
+    //         || tileAtDestination.index === dungeon.sprites.trackRight
+    //         || tileAtDestination.index === dungeon.sprites.trackStraight
+    //     ) {
+    //         x = Phaser.Math.Between(0, this.level[0].length - 1);
+    //         y = Phaser.Math.Between(0, this.level.length - 1);
+    //         tileAtDestination = dungeon.map.getTileAt(x, y);
+    //     }
+    //     return {x, y};
+    // }
+
     randomWalkableTile: function () {
-        let x = Phaser.Math.Between(0, this.level[0].length - 1);
-        let y = Phaser.Math.Between(0, this.level.length - 1);
+        let x = Phaser.Math.Between(0, dungeon.level[0].length - 1);
+        let y = Phaser.Math.Between(0, dungeon.level.length - 1);
         let tileAtDestination = dungeon.map.getTileAt(x, y);
-        while(typeof tileAtDestination == "undefined" 
-            || tileAtDestination.index === dungeon.sprites
-            || tileAtDestination.index === dungeon.sprites.pillarTop
-            || tileAtDestination.index === dungeon.sprites.pillarMiddle
-            || tileAtDestination.index === dungeon.sprites.pillarBottom
-            || tileAtDestination.index === dungeon.sprites.spoutDrain
-            || tileAtDestination.index === dungeon.sprites.spoutMouth
-            || tileAtDestination.index === dungeon.sprites.caveLeft
-            || tileAtDestination.index === dungeon.sprites.caveRight
-            || tileAtDestination.index === dungeon.sprites.window
-            || tileAtDestination.index === dungeon.sprites.minecart
-            || tileAtDestination.index === dungeon.sprites.anvil
-            || tileAtDestination.index === dungeon.sprites.trackLeft
-            || tileAtDestination.index === dungeon.sprites.trackRight
-            || tileAtDestination.index === dungeon.sprites.trackStraight
-        ) {
-            x = Phaser.Math.Between(0, this.level[0].length - 1);
-            y = Phaser.Math.Between(0, this.level.length - 1);
+        while (typeof tileAtDestination == "undefined" || tileAtDestination.index == dungeon.sprites.wall) {
+            x = Phaser.Math.Between(0, dungeon.level[0].length - 1);
+            y = Phaser.Math.Between(0, dungeon.level.length - 1);
             tileAtDestination = dungeon.map.getTileAt(x, y);
         }
-        return {x, y};
-    }
+        return { x, y };
+    },
 }
 
 export default dungeon

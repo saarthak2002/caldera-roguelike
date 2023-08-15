@@ -4,12 +4,12 @@ const golden = {
     name: "Golden",
     initialize: function() {
         this.name = `Golden ${this.name}`;
-        this.tint = 0xccbc00;
-        if(this.sprite) {
-            this.sprite.tint = this.tint;
-        }
+        // this.tint = 0xccbc00;
+        // if(this.sprite) {
+        //     this.sprite.tint = this.tint;
+        // }
         if(this.type == "item") {
-            this.equpipHPBonus = 1;
+            this.equipHPBonus = 1;
         }
     },
     equip(acc, itemNumber, entity) {
