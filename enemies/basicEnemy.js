@@ -61,9 +61,13 @@ export default class BasicEnemy extends Taggable {
 
     onDestroy() {
         dungeon.log(`${this.name} was destroyed.`);
-        this.UIsprite.setAlpha(0.2);
-        this.UItext.setAlpha(0.2);
-
+        if(this.UIsprite) {
+            this.UIsprite.setAlpha(0.2);
+        }
+        if(this.UItext) {
+            this.UItext.setAlpha(0.2);
+        }
+        
         let x = this.x;
         let y = this.y;
         let item = getRandomItem(x, y, 1, 1);
@@ -80,7 +84,9 @@ export default class BasicEnemy extends Taggable {
             this.UItext.setColor('#cfc6b8')
         }
         else {
-            this.UItext.setColor('#50C878')
+            if (this.UItext){
+                this.UItext.setColor('#50C878');
+            }
         }
         if (this.HPtext) {
             this.HPtext.setText(

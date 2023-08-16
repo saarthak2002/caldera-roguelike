@@ -74,17 +74,17 @@ const world = {
         // turnManager.addEntity(new GraveSpirit(28, 43));
         // turnManager.addEntity(new Necromancer(57, 32));
 
-        turnManager.addEntity(dungeon.player)
-        let  monsterCount= 10
+        turnManager.addEntity(dungeon.player);
+        let  monsterCount= 10;
         while(monsterCount> 0) {
-            let tile = dungeon.randomWalkableTile()
+            let tile = dungeon.randomWalkableTile();
             turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
             monsterCount--;
         }
-        let itemCount = 10
+        let itemCount = 10;
         while(itemCount > 0) {
-            let tile = dungeon.randomWalkableTile()
-            turnManager.addEntity(getRandomItem(tile.x, tile.y))
+            let tile = dungeon.randomWalkableTile();
+            turnManager.addEntity(getRandomItem(tile.x, tile.y));
             itemCount--;
         }
 

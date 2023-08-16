@@ -1,5 +1,16 @@
 import dungeon from "../dungeon.js";
+import turnManager from "../turnManager.js";
 import BasicEnemy from "./basicEnemy.js";
+import CursedSceptre from "../items/cursedSceptre.js";
+// import { getRandomEnemy } from "../enemies.js"
+import BasicMonster from "./cyclops.js";
+import Bat from "./bat.js";
+import { getRandomTagsForEnemy } from "../tags.js";
+
+const enemies = {
+    BasicMonster,
+    Bat
+}
 
 export default class Necromancer extends BasicEnemy {
     constructor(x, y) {
@@ -7,7 +18,7 @@ export default class Necromancer extends BasicEnemy {
         this.name = `Necromancer`;
         this.movementPoints = 1;
         this.actionPoints = 0;
-        this.healthPoints = 10;
+        this.healthPoints = 1;
         this.refreshRates = {
             movementPoints: 5,
             actionPoints: 3,
@@ -20,8 +31,8 @@ export default class Necromancer extends BasicEnemy {
         this.x = x;
         this.y = y;
         this.tile = 111;
-        this.type = "npc";
-        this.active = false;
+        this.type = "enemy";
+        this.active = true;
         this.weapon.name = "dark magic";
         dungeon.initializeEntity(this);
     }
@@ -34,6 +45,27 @@ export default class Necromancer extends BasicEnemy {
         dungeon.log(`${this.name} has been destroyed!`);
         dungeon.necromancerScream.play();
         turnManager.addEntity(new CursedSceptre(this.x, this.y));
+        // let  monsterCount= 3;
+        // while(monsterCount> 0) {
+        //     let tile = dungeon.randomWalkableTile()
+        //     turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+        //     monsterCount--;
+        // }
+
+        let  monsterCount= 3;
+        while(monsterCount> 0) {
+            let tile = dungeon.randomWalkableTile()
+            let key = Phaser.Math.RND.weightedPick(Object.keys(enemies));
+            let tags = getRandomTagsForEnemy(1, 1);
+            console.log(key);
+            console.log(tags);
+            turnManager.addEntity(new enemies[key](tile.x, tile.y).addTags(tags));
+            monsterCount--;
+        }
+
+        // let key = Phaser.Math.RND.weightedPick(Object.keys(enemies));
+
+        dungeon.log(`The Necromancer's curse summoned 3 monsters!`);
         this.UIsprite.setAlpha(0.2);
         this.UItext.setAlpha(0.2);
         this.HPtext.setAlpha(0.2);
