@@ -12,6 +12,7 @@ import SharpDagger from "./items/sharpDagger.js";
 import Shield from "./items/shield.js";
 import SoldiersShield from "./items/soldiersShield.js";
 import Broadsword from "./items/broadSword.js";
+import AttackPotion from "./items/attackPotion.js";
 import { getRandomTagsForItem } from "./tags.js";
 import CurseOfDeath from "./items/necromancerCurse.js";
 
@@ -30,6 +31,7 @@ const items = {
     Shield,
     SoldiersShield,
     Broadsword,
+    AttackPotion
     // CurseOfDeath
 }
 

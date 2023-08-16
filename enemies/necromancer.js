@@ -18,7 +18,7 @@ export default class Necromancer extends BasicEnemy {
         this.name = `Necromancer`;
         this.movementPoints = 1;
         this.actionPoints = 0;
-        this.healthPoints = 1;
+        this.healthPoints = Phaser.Math.Between(5,10);
         this.refreshRates = {
             movementPoints: 5,
             actionPoints: 3,
