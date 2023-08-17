@@ -106,6 +106,7 @@ export default class BSPDungeon {
         this.tree = makeTree(this.rootArea, iterations);
         this.initializeLevelData();
         this.makeRooms();
+        this.makeCorridors();
     }
 
     initializeLevelData() {
@@ -133,12 +134,35 @@ export default class BSPDungeon {
         }
     }
 
+    line(x1, y1, x2, y2, tile) {
+        for(let y=y1; y<=y2;y++){
+            for(let x = x1; x <= x2; x++) {
+                this.levelData[y][x] = tile;
+            }
+        }
+    }
+
     makeRooms() {
         const makeRoom = (area) => {
             area.room = new DungeonRoom(area);
             this.fillRect(area.room.x, area.room.y, area.room.w, area.room.h, 0);
         }
         this.tree.forEachLeaf(makeRoom);
+    }
+
+    makeCorridors() {
+        const makePath = (node) => {
+            if(node.left && node.right) {
+                let x1 = Math.floor(node.left.area.x + (node.left.area.w/2));
+                let y1 = Math.floor(node.left.area.y + (node.left.area.h/2));   
+                let x2 = Math.floor(node.right.area.x + (node.right.area.w/2));
+                let y2 = Math.floor(node.right.area.y + (node.right.area.h/2));
+                this.line(x1, y1, x2, y2, 0);
+                makePath(node.left);
+                makePath(node.right);
+            }
+        }
+        makePath(this.tree);
     }
 }
 
