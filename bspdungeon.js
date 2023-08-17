@@ -16,6 +16,18 @@ class DungeonNode {
             this.right.forEachArea(f);
         }
     }
+
+    forEachLeaf(f) {
+        if(!this.left && !this.right) {
+            f(this.area);
+        }
+        if(this.left) {
+            this.left.forEachLeaf(f);
+        }
+        if(this.right) {
+            this.right.forEachLeaf(f);
+        }
+    }
 }
 
 class DungeonArea {
@@ -93,6 +105,7 @@ export default class BSPDungeon {
         this.rootArea = new DungeonArea(0, 0, width , height );
         this.tree = makeTree(this.rootArea, iterations);
         this.initializeLevelData();
+        this.makeRooms();
     }
 
     initializeLevelData() {
@@ -101,7 +114,7 @@ export default class BSPDungeon {
         for (let y = 0; y <= this.rootArea.h; y++) {
             level[y] = level[y] || [];
             for (let x = 0; x <= this.rootArea.w; x++) {
-                level[y][x] = 0;
+                level[y][x] = 1;
             }
         }
 
@@ -110,6 +123,22 @@ export default class BSPDungeon {
 
     toLevelData() {
         return this.levelData;
+    }
+
+    fillRect(x, y, w, h, tile) {
+        for(let y1= y; y1 < y + h; y1++) {
+            for(let x1 = x; x1 < x + w; x1++) {
+                this.levelData[y1][x1] = tile;
+            }
+        }
+    }
+
+    makeRooms() {
+        const makeRoom = (area) => {
+            area.room = new DungeonRoom(area);
+            this.fillRect(area.room.x, area.room.y, area.room.w, area.room.h, 0);
+        }
+        this.tree.forEachLeaf(makeRoom);
     }
 }
 
