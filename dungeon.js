@@ -157,10 +157,13 @@ let dungeon = {
             this.scene.tweens.add({
                 targets: attacker.sprite,
                 onComplete: () => {
-                    attacker.sprite.x = this.map.tileToWorldX(attacker.x);
-                    attacker.sprite.y = this.map.tileToWorldX(attacker.y);
-                    attacker.moving = false;
-                    attacker.tweens -= 1;
+                    if(attacker.sprite) {
+                        attacker.sprite.x = this.map.tileToWorldX(attacker.x);
+                        attacker.sprite.y = this.map.tileToWorldX(attacker.y);
+                        attacker.moving = false;
+                        attacker.tweens -= 1;
+                    }
+                    
 
                     let attack = attacker.attack();
                     let protection = victim.protection();
