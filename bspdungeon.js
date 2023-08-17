@@ -74,3 +74,11 @@ function splitArea(area) {
 
     return [a1, a2];
 }
+
+export default class BSPDungeon {
+    constructor(width, height, iterations) {
+        this.rootArea = new DungeonArea(0, 0, width, height);
+        this.tree = makeTree(this.rootArea, iterations);
+        this.initializeLevelData();
+    }
+}
