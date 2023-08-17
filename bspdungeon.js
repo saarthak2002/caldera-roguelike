@@ -81,4 +81,19 @@ export default class BSPDungeon {
         this.tree = makeTree(this.rootArea, iterations);
         this.initializeLevelData();
     }
+
+    initializeLevelData() {
+        let level = []
+        for(let y =0; y <= this.rootArea.h; y++) {
+            level[y] = level[y] || [];
+            for(let x = 0; x <= this.rootArea.w; x++) {
+                level[y][x] = 0;
+            }
+        }
+        this.levelData = level;
+    }
+
+    toLevelData() {
+        return this.levelData;
+    }
 }
