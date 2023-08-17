@@ -45,6 +45,7 @@ export default class Necromancer extends BasicEnemy {
         dungeon.log(`${this.name} has been destroyed!`);
         dungeon.necromancerScream.play();
         turnManager.addEntity(new CursedSceptre(this.x, this.y));
+        dungeon.player.score += 1200;
         // let  monsterCount= 3;
         // while(monsterCount> 0) {
         //     let tile = dungeon.randomWalkableTile()

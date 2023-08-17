@@ -5,6 +5,7 @@ export default class BasicHero extends Taggable {
     constructor(x, y) {
         super(x,y);
         this.name = "The Hero";
+        this.score = 0;
         this.movementPoints = 1;
         this.actionPoints = 1;
         this.healthPoints = 30;
@@ -243,6 +244,11 @@ export default class BasicHero extends Taggable {
                 `Hp: ${this.healthPoints}\nMp: ${this.movementPoints}\nAp: ${this.actionPoints}`
             );
         }
+        if(this.ScoreHeader) {
+            this.ScoreHeader.setText (
+                `Score: ${this.score}`
+            );
+        }
         if(this.UIbuffText) {
             this.UIbuffText.setText(
                 `${this.attackBuff}\n${this.defenseBuff}`
@@ -269,6 +275,16 @@ export default class BasicHero extends Taggable {
             x + 20,
             y,
             this.name,
+            {
+                font: '16px arcade',
+                color: '#cfc6b8',
+            },
+        );
+
+        this.ScoreHeader = this.UIscene.add.text(
+            x + 80,
+            y,
+            `Score: ${this.score}`,
             {
                 font: '16px arcade',
                 color: '#cfc6b8',

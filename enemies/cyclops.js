@@ -27,7 +27,7 @@ export default class BasicMonster extends BasicEnemy {
         this.type = "enemy";
         this.active = true;
         this.weapon.name = 'club';
-
+        this.destroyPoints = 150;
         dungeon.initializeEntity(this);
     }
     // refresh() {

@@ -28,6 +28,7 @@ export default class Bat extends BasicEnemy {
         this.type = "enemy";
         this.active = true;
         this.weapon.name = "bite";
+        this.destroyPoints = 75;
         dungeon.initializeEntity(this);
     }
     // refresh() {

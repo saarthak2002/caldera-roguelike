@@ -14,6 +14,7 @@ export default class BasicEnemy extends Taggable {
         this.maxHealthPoints = this.healthPoints;
         this.moving = false;
         this.weapon = new GenericItem();
+        this.destroyPoints = 1;
 
         this.refreshRates = {
             movementPoints: 1,
@@ -61,6 +62,8 @@ export default class BasicEnemy extends Taggable {
 
     onDestroy() {
         dungeon.log(`${this.name} was destroyed.`);
+        dungeon.player.score += this.destroyPoints;
+        console.log(dungeon.player.score);
         if(this.UIsprite) {
             this.UIsprite.setAlpha(0.2);
         }

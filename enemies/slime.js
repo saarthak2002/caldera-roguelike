@@ -23,6 +23,7 @@ export default class Slime extends BasicEnemy {
         this.type = "enemy";
         this.active = true;
         this.weapon.name = "poison";
+        this.destroyPoints = 300;
         dungeon.initializeEntity(this);
     }
 }

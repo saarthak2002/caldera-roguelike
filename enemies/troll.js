@@ -23,6 +23,7 @@ export default class Troll extends BasicEnemy {
         this.type = "enemy";
         this.active = true;
         this.weapon.name = "club";
+        this.destroyPoints = 500;
         dungeon.initializeEntity(this);
     }
 }

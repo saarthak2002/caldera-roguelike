@@ -26,6 +26,7 @@ export default class WizLord extends BasicEnemy {
         this.type = "enemy";
         this.active = true;
         this.weapon.name = "spells";
+        this.destroyPoints = 700;
         dungeon.initializeEntity(this);
     }
 
