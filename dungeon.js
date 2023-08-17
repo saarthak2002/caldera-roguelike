@@ -1,5 +1,4 @@
 import BasicHero from "./classes/basicHero.js";
-import level from "./level.js";
 import turnManager from "./turnManager.js";
 
 let dungeon = {
@@ -26,7 +25,7 @@ let dungeon = {
         anvil : 74,
     },
     tileSize: 16,
-    initialize: function (scene) {
+    initialize: function (scene, level) {
         this.scene = scene;
         this.level = level;
         let levelWithTiles = level.map(row => {

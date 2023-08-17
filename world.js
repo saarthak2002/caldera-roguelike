@@ -1,25 +1,13 @@
 import dungeon from "./dungeon.js";
-import PlayerCharacter from "./player.js";
+import BSPDungeon from "./bspdungeon.js";
 import turnManager from "./turnManager.js";
-
-import BasicMonster from "./enemies/cyclops.js";
-
-import WizLord from "./enemies/wizard.js";
-import wizardAltar from "./structures/wizardAltar.js";
-
-import Blacksmith from "./npcs/blacksmith.js";
-import blacksmithShop from "./structures/blacksmithShop.js";
-import GraveSpirit from "./npcs/gravespirit.js";
-
-import HealingPotion from "./items/healingPotion.js";
-import SharpDagger from "./items/sharpDagger.js";
-import Necromancer from "./enemies/necromancer.js";
-import Bat from "./enemies/bat.js";
-
 import classes from "./classes.js";
 
 import { getRandomItem } from "./items.js"
 import { getRandomEnemy } from "./enemies.js"
+
+
+
 
 const world = {
     key: 'world-scene',
@@ -39,61 +27,54 @@ const world = {
         this.load.audio('gameover', 'assets/audio/gameover.mp3');
     },
     create: function () {
-        dungeon.initialize(this);
 
-        const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
-        const player =archtypes[Math.floor(Math.random() * archtypes.length)]
+        let dungeonGenerator = new BSPDungeon(80, 50, 4);
+        let level = dungeonGenerator.toLevelData();
+        dungeon.initialize(this, level);
 
-        dungeon.player = new player(15, 15);
-        // dungeon.create3by3Structure(35, 6, wizardAltar);
-        // dungeon.create3by3Structure(45, 16, blacksmithShop);
-        dungeon.attackSound = this.sound.add('attack');
-        dungeon.upgradeSound = this.sound.add('upgrade');
-        dungeon.magicAttackSound = this.sound.add('magicAttack');
-        dungeon.healSound = this.sound.add('heal');
-        dungeon.pickupSound = this.sound.add('pickup');
-        dungeon.necromancerScream = this.sound.add('necromancer');
-        dungeon.massiveHit = this.sound.add('massiveHit');
-        dungeon.footsteps = this.sound.add('footseps');
-        dungeon.gameover = this.sound.add('gameover');
+        // const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
+        // const player =archtypes[Math.floor(Math.random() * archtypes.length)]
+
+        // dungeon.player = new player(15, 15);
+        // dungeon.attackSound = this.sound.add('attack');
+        // dungeon.upgradeSound = this.sound.add('upgrade');
+        // dungeon.magicAttackSound = this.sound.add('magicAttack');
+        // dungeon.healSound = this.sound.add('heal');
+        // dungeon.pickupSound = this.sound.add('pickup');
+        // dungeon.necromancerScream = this.sound.add('necromancer');
+        // dungeon.massiveHit = this.sound.add('massiveHit');
+        // dungeon.footsteps = this.sound.add('footseps');
+        // dungeon.gameover = this.sound.add('gameover');
 
         // turnManager.addEntity(dungeon.player);
-        // turnManager.addEntity(new BasicMonster(70, 8));
-        // turnManager.addEntity(new BasicMonster(45, 21));
-        // turnManager.addEntity(new BasicMonster(30, 43));
-        // turnManager.addEntity(new BasicMonster(70, 40));
-        // turnManager.addEntity(new WizLord(35, 6));
-        // turnManager.addEntity(new Blacksmith(46, 16));
-        // turnManager.addEntity(new Bat(20, 11));
-        // turnManager.addEntity(new Bat(53, 33));
-        // turnManager.addEntity(new Bat(55, 31));
-
-        // turnManager.addEntity(new HealingPotion(30, 43));
-        // turnManager.addEntity(new SharpDagger(54, 32));
-
-        // turnManager.addEntity(new GraveSpirit(28, 43));
-        // turnManager.addEntity(new Necromancer(57, 32));
-
-        turnManager.addEntity(dungeon.player);
-        let  monsterCount= 10;
-        while(monsterCount> 0) {
-            let tile = dungeon.randomWalkableTile();
-            turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
-            monsterCount--;
-        }
-        let itemCount = 10;
-        while(itemCount > 0) {
-            let tile = dungeon.randomWalkableTile();
-            turnManager.addEntity(getRandomItem(tile.x, tile.y));
-            itemCount--;
-        }
+        // let  monsterCount= 10;
+        // while(monsterCount> 0) {
+        //     let tile = dungeon.randomWalkableTile();
+        //     turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+        //     monsterCount--;
+        // }
+        // let itemCount = 10;
+        // while(itemCount > 0) {
+        //     let tile = dungeon.randomWalkableTile();
+        //     turnManager.addEntity(getRandomItem(tile.x, tile.y));
+        //     itemCount--;
+        // }
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
         camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
-        camera.startFollow(dungeon.player.sprite);
-        this.events.emit('createUI');
+        // camera.startFollow(dungeon.player.sprite);
+        // this.events.emit('createUI');
 
+        dungeonGenerator.tree.forEachArea(area => {
+            let x = dungeon.map.tileToWorldX(area.x);
+            let y = dungeon.map.tileToWorldY(area.y);
+            let w = area.w * 16;
+            let h = area.h * 16;
+            this.add.rectangle(x, y, w, h).setStrokeStyle(4, 0xff0000, 1, 0.7).setOrigin(0);
+        });
+
+        ///////////////// MUSIC ////////////////////
         this.scene.get('world-scene').events.on('gameover', () => {
             console.log('Game over');
             this.music.stop();
@@ -159,13 +140,14 @@ const world = {
         });
         this.musicButton.fixedToCamera = true;
         this.musicButton.setScrollFactor(0);
+        ///////////////// MUSIC ////////////////////
     },
 
     update: function () {
-        if (turnManager.over()) {
-            turnManager.refresh();
-        }
-        turnManager.turn();
+        // if (turnManager.over()) {
+        //     turnManager.refresh();
+        // }
+        // turnManager.turn();
     },
 }
 
