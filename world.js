@@ -29,7 +29,15 @@ const world = {
         let level = dungeonGenerator.toLevelData();
         dungeon.initialize(this, level);
 
-        let playerSpawn = dungeon.randomWalkableTile();
+        let rooms = dungeonGenerator.getRooms();
+
+        let node = dungeonGenerator.tree.left;
+        while (node.left !== false) {
+            node = node.left
+        }
+        let spanwRoom = node.area.room;
+
+        let playerSpawn = dungeon.randomWalkableTileInRoom(spanwRoom.x,spanwRoom.y,spanwRoom.w,spanwRoom.h);
         const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
         const player = archtypes[Math.floor(Math.random() * archtypes.length)];
         dungeon.player = new player(playerSpawn.x, playerSpawn.y);
@@ -45,19 +53,55 @@ const world = {
         dungeon.gameover = this.sound.add('gameover');
 
         turnManager.addEntity(dungeon.player);
+
+        rooms.forEach(room => {
+            let area = room.w * room.h;
+            let monsterCount = 0;
+            let itemCount = 0;
+            let roomType = Phaser.Math.RND.weightedPick([0,0,0,0,1,1,1,1,1,2,2,2,2,2,3]);
+            switch(roomType) {
+                case 0:
+                    monsterCount = 0;
+                    itemCount = 0;
+                    break;
+                case 1:
+                    monsterCount = 1;
+                    itemCount = Phaser.Math.Between(0,1);
+                    break;
+                case 2:
+                    monsterCount = 2;
+                    itemCount = 1;
+                    break;
+                case 3:
+                    monsterCount = 0;
+                    itemCount = 5;
+                    break;
+            }
+
+            while(monsterCount > 0) {
+                let tile = dungeon.randomWalkableTileInRoom(room.x, room.y, room.w, room.h);
+                turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+                monsterCount--;
+            }
+            while(itemCount > 0) {
+                let tile = dungeon.randomWalkableTileInRoom(room.x, room.y, room.w, room.h);
+                turnManager.addEntity(getRandomItem(tile.x, tile.y));
+                itemCount--;
+            }
+        });
         
-        let  monsterCount= 10;
-        while(monsterCount> 0) {
-            let tile = dungeon.randomWalkableTile();
-            turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
-            monsterCount--;
-        }
-        let itemCount = 10;
-        while(itemCount > 0) {
-            let tile = dungeon.randomWalkableTile();
-            turnManager.addEntity(getRandomItem(tile.x, tile.y));
-            itemCount--;
-        }
+        // let  monsterCount= 10;
+        // while(monsterCount> 0) {
+        //     let tile = dungeon.randomWalkableTile();
+        //     turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+        //     monsterCount--;
+        // }
+        // let itemCount = 10;
+        // while(itemCount > 0) {
+        //     let tile = dungeon.randomWalkableTile();
+        //     turnManager.addEntity(getRandomItem(tile.x, tile.y));
+        //     itemCount--;
+        // }
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
@@ -70,7 +114,7 @@ const world = {
             let y = dungeon.map.tileToWorldY(area.y);
             let w = area.w * 16;
             let h = area.h * 16;
-            this.add.rectangle(x, y, w, h).setStrokeStyle(4, 0xff0000, 1, 0.7).setOrigin(0);
+            // this.add.rectangle(x, y, w, h).setStrokeStyle(4, 0xff0000, 1, 0.7).setOrigin(0);
         });
 
         ///////////////// MUSIC ////////////////////

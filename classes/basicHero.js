@@ -323,6 +323,7 @@ export default class BasicHero extends Taggable {
                 let rowY = y + 50 + (row * 25);
                 this.UIitems.push(
                     this.UIscene.add.rectangle(rowX, rowY, 20, 20, 0xcfc6b8, 0.3).setOrigin(0)
+                    
                 );
             }
         }

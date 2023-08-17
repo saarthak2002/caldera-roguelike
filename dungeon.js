@@ -314,6 +314,18 @@ let dungeon = {
         }
         return { x, y };
     },
+
+    randomWalkableTileInRoom: function(x, y, w, h) {
+        let rx = Phaser.Math.Between(x, (x+w) - 1);
+        let ry = Phaser.Math.Between(y, (y+h) - 1);
+        let tileAtDestination = dungeon.map.getTileAt(rx, ry);
+        while(typeof tileAtDestination == "undefined" || tileAtDestination.index == dungeon.sprites.wall) {
+            rx = Phaser.Math.Between(x, (x + w) - 1);
+            ry = Phaser.Math.Between(y, (y + h) - 1);
+            tileAtDestination = dungeon.map.getTileAt(rx, ry);
+        }
+        return { x: rx, y: ry };
+    }
 }
 
 export default dungeon

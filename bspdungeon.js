@@ -164,6 +164,14 @@ export default class BSPDungeon {
         }
         makePath(this.tree);
     }
+
+    getRooms() {
+        let rooms = [];
+        this.tree.forEachLeaf(area => {
+            rooms.push(area.room);
+        });
+        return rooms;
+    }
 }
 
 class DungeonRoom {
