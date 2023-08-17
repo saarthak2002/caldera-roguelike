@@ -6,9 +6,6 @@ import classes from "./classes.js";
 import { getRandomItem } from "./items.js"
 import { getRandomEnemy } from "./enemies.js"
 
-
-
-
 const world = {
     key: 'world-scene',
     active: true,
@@ -32,39 +29,41 @@ const world = {
         let level = dungeonGenerator.toLevelData();
         dungeon.initialize(this, level);
 
-        // const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
-        // const player =archtypes[Math.floor(Math.random() * archtypes.length)]
+        let playerSpawn = dungeon.randomWalkableTile();
+        const archtypes = [classes.Warrior, classes.Sorcerer, classes.Elf, classes.Cleric, classes.Dwarf];
+        const player = archtypes[Math.floor(Math.random() * archtypes.length)];
+        dungeon.player = new player(playerSpawn.x, playerSpawn.y);
 
-        // dungeon.player = new player(15, 15);
-        // dungeon.attackSound = this.sound.add('attack');
-        // dungeon.upgradeSound = this.sound.add('upgrade');
-        // dungeon.magicAttackSound = this.sound.add('magicAttack');
-        // dungeon.healSound = this.sound.add('heal');
-        // dungeon.pickupSound = this.sound.add('pickup');
-        // dungeon.necromancerScream = this.sound.add('necromancer');
-        // dungeon.massiveHit = this.sound.add('massiveHit');
-        // dungeon.footsteps = this.sound.add('footseps');
-        // dungeon.gameover = this.sound.add('gameover');
+        dungeon.attackSound = this.sound.add('attack');
+        dungeon.upgradeSound = this.sound.add('upgrade');
+        dungeon.magicAttackSound = this.sound.add('magicAttack');
+        dungeon.healSound = this.sound.add('heal');
+        dungeon.pickupSound = this.sound.add('pickup');
+        dungeon.necromancerScream = this.sound.add('necromancer');
+        dungeon.massiveHit = this.sound.add('massiveHit');
+        dungeon.footsteps = this.sound.add('footseps');
+        dungeon.gameover = this.sound.add('gameover');
 
-        // turnManager.addEntity(dungeon.player);
-        // let  monsterCount= 10;
-        // while(monsterCount> 0) {
-        //     let tile = dungeon.randomWalkableTile();
-        //     turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
-        //     monsterCount--;
-        // }
-        // let itemCount = 10;
-        // while(itemCount > 0) {
-        //     let tile = dungeon.randomWalkableTile();
-        //     turnManager.addEntity(getRandomItem(tile.x, tile.y));
-        //     itemCount--;
-        // }
+        turnManager.addEntity(dungeon.player);
+        
+        let  monsterCount= 10;
+        while(monsterCount> 0) {
+            let tile = dungeon.randomWalkableTile();
+            turnManager.addEntity(getRandomEnemy(tile.x, tile.y));
+            monsterCount--;
+        }
+        let itemCount = 10;
+        while(itemCount > 0) {
+            let tile = dungeon.randomWalkableTile();
+            turnManager.addEntity(getRandomItem(tile.x, tile.y));
+            itemCount--;
+        }
 
         let camera = this.cameras.main;
         camera.setViewport(0, 0, camera.worldView.width - 200, camera.worldView.height);
         camera.setBounds(0, 0, camera.worldView.width, camera.worldView.height);
-        // camera.startFollow(dungeon.player.sprite);
-        // this.events.emit('createUI');
+        camera.startFollow(dungeon.player.sprite);
+        this.events.emit('createUI');
 
         dungeonGenerator.tree.forEachArea(area => {
             let x = dungeon.map.tileToWorldX(area.x);
@@ -144,10 +143,10 @@ const world = {
     },
 
     update: function () {
-        // if (turnManager.over()) {
-        //     turnManager.refresh();
-        // }
-        // turnManager.turn();
+        if (turnManager.over()) {
+            turnManager.refresh();
+        }
+        turnManager.turn();
     },
 }
 

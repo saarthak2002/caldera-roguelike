@@ -79,6 +79,10 @@ let dungeon = {
             }
         }
         let tileAtDestination = dungeon.map.getTileAt(x, y);
+        if(tileAtDestination === null) {
+            console.log('world end');
+            return false;
+        }
         return (
             tileAtDestination.index !== dungeon.sprites.wall
             && tileAtDestination.index !== dungeon.sprites.pillarTop
