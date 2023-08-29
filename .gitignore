@@ -86,4 +86,5 @@ lerna-debug.log
 
 # System Files
 .DS_Store
+.vercel/
 Thumbs.db
